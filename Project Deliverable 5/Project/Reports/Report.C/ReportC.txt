@@ -1,0 +1,34 @@
+SQL> --Report C
+SQL> 
+SQL> TTITLE left 'Report C'
+SQL> BTITLE left 'End of Report'
+SQL> column "Comments" format a35
+SQL> column "Title" format a35
+SQL> select TMB_REVIEWS.comments, TMB_PRODUCTS.title
+  2  FROM TMB_REVIEWS
+  3  JOIN TMB_PRODUCTS ON TMB_REVIEWS.product_number = TMB_PRODUCTS.product_number
+  4  WHERE rating < 3
+  5  ORDER BY rating;
+
+Report C                                                                                                                                                                                                
+COMMENTS                            TITLE                                                                                                                                                               
+----------------------------------- -----------------------------------                                                                                                                                 
+Manager...Now...                    1984                                                                                                                                                                
+Dissapointed...                     All Ghibli OST                                                                                                                                                      
+
+
+
+
+
+
+
+
+End of Report                                                                                                                                                                                           
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off

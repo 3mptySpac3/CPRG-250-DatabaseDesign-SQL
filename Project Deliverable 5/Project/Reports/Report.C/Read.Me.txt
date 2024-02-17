@@ -1,0 +1,12 @@
+SQL Report C
+This SQL code retrieves data from two tables (TMB_REVIEWS and TMB_PRODUCTS) and filters it based on the rating field. It returns a table with the following columns:
+
+COMMENTS: the comments left by customers who rated the product less than 3 stars
+TITLE: the title of the product
+The WHERE clause limits the results to reviews with a rating of less than 3 stars. The final table is sorted by rating.
+
+The column commands format the output of the table so that the column names are displayed more clearly. The commit statement finalizes any changes made to the database.
+
+***
+The code is useful for generating reports on customer feedback for products that received low ratings. This information can be used by the company to identify areas for improvement in their products, customer service, or other aspects of their business. By analyzing common themes in the comments, the company can develop strategies for addressing customer concerns and improving overall satisfaction.
+***

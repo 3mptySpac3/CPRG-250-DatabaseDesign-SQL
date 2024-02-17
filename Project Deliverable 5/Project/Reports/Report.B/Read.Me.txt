@@ -1,0 +1,14 @@
+SQL Report B
+
+This SQL code retrieves data from several tables (TMB_CUSTOMERS, TMB_ORDERS, TMB_ORDER_ITEMS, and TMB_PRODUCTS) and filters it based on the province field. It returns a table with the following columns:
+
+PRODUCT_NUMBER: the unique identifier of the product
+TITLE: the title of the product
+ORDER_QUANTITY: the quantity of the product ordered by customers in Ontario
+The WHERE clause limits the results to customers located in the province of ('AB', 'BC', 'MB', 'QC'). The final table is sorted by product_number.
+
+The column commands format the output of the table so that the column names are displayed more clearly. The commit statement finalizes any changes made to the database.
+
+***
+The code is useful for generating reports about product sales in a particular region, in this case, the province of Ontario. The data returned can be used to analyze product popularity in the region, and can help inform business decisions such as marketing and inventory management.
+***

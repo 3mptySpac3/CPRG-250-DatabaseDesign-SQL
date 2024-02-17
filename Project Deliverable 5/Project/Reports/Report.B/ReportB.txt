@@ -1,0 +1,41 @@
+SQL> --Report B
+SQL> 
+SQL> 
+SQL> TTITLE left 'Report B'
+SQL> BTITLE left 'End of Report'
+SQL> SELECT product_number, title, total_order_quantity
+  2  FROM (
+  3    SELECT TMB_PRODUCTS.product_number AS product_number,
+  4           TMB_PRODUCTS.title AS title,
+  5           SUM(TMB_ORDER_ITEMS.order_quantity) AS total_order_quantity
+  6    FROM TMB_CUSTOMERS
+  7    JOIN TMB_ORDERS ON TMB_CUSTOMERS.customer_number = TMB_ORDERS.customer_number
+  8    JOIN TMB_ORDER_ITEMS ON TMB_ORDERS.order_number = TMB_ORDER_ITEMS.order_number
+  9    JOIN TMB_PRODUCTS ON TMB_ORDER_ITEMS.product_number = TMB_PRODUCTS.product_number
+ 10    WHERE province in ('AB', 'BC', 'MB', 'QC')
+ 11    GROUP BY TMB_PRODUCTS.product_number, TMB_PRODUCTS.title
+ 12  ) subquery
+ 13  ORDER BY product_number;
+
+Report B                                                                                                                                                                                                
+PRODUCT_NUMBER TITLE                               TOTAL_ORDER_QUANTITY                                                                                                                                 
+-------------- ----------------------------------- --------------------                                                                                                                                 
+          2394 Call of Duty Modern III                                1                                                                                                                                 
+          2834 1984                                                   1                                                                                                                                 
+          3395 All Ghibli OST                                         3                                                                                                                                 
+          4956 Mincraft                                               5                                                                                                                                 
+
+
+
+
+
+
+End of Report                                                                                                                                                                                           
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off
