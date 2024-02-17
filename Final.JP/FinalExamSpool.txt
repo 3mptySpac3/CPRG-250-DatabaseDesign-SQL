@@ -1,0 +1,134 @@
+SQL> 
+SQL> --Solution for Question 1
+SQL> 
+SQL> set echo off;
+SQL> set feedback off;
+SQL> set LINESIZE 175;
+SQL> set pagesize 30;
+SQL> 
+SQL> column "Entertainer ID" format 9
+SQL> column "Client ID" format 9
+SQL> column "Date" format 99-99-99
+SP2-0246: Illegal FORMAT string "99-99-99"
+SQL> column "Client Fee" format 99999
+SQL> select g.entertainerID as "Entertainer ID", g.clientID as "Client ID", g.startDate as "Date", g.clientFee as "Client Fee"
+  2  from hn_entertainerGig g
+  3  inner join hn_entertainer e on g.entertainerID = e.entertainerID
+  4  where g.startDate between TO_DATE('2021-05-01', 'YYYY-MM-DD') and TO_DATE('2021-05-31', 'YYYY-MM-DD')
+  5  order by g.startDate desc;
+
+Entertainer ID Client ID Date      Client Fee                                                                                                                                  
+-------------- --------- --------- ----------                                                                                                                                  
+             4         2 22-MAY-21      10000                                                                                                                                  
+             4         1 22-MAY-21       5000                                                                                                                                  
+             6         2 22-MAY-21       6000                                                                                                                                  
+             3         1 21-MAY-21       5000                                                                                                                                  
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Solution for Question 2
+SQL> 
+SQL> set echo off;
+SQL> set feedback off;
+SQL> set LINESIZE 175;
+SQL> set pagesize 30;
+SQL> 
+SQL> 
+SQL> column "Client Name" format a20
+SQL> column "Start Date" format 99-99-99
+SP2-0246: Illegal FORMAT string "99-99-99"
+SQL> column "Client Fee" format 99999
+SQL> column "Stage Name" format a20
+SQL> column "Event Type" format a30
+SQL> select c.firstName || ' ' || c.lastName as "Client Name", g.startDate as "Start Date", g.clientFee as "Client Fee", e.stageName as "Stage Name", e.eventType as "Event Type"
+  2  from hn_client c
+  3  inner join hn_entertainerGig g on c.clientID = g.clientID
+  4  inner join hn_entertainer e on g.entertainerID = e.entertainerID
+  5  order by c.lastName, g.startDate;
+
+Client Name          Start Date           Client Fee Stage Name           Event Type                                                                                           
+-------------------- -------------------- ---------- -------------------- ------------------------------                                                                       
+Eddie Davis          01-JUL-21                  4000 Jeff Dunham          Puppet Ventriloquist                                                                                 
+Johnny Gaudreau      21-MAY-21                  5000 Chris Rock           Stand-up Comedy                                                                                      
+Johnny Gaudreau      22-MAY-21                  5000 Drake                Rap Singer                                                                                           
+Auston Matthews      02-AUG-21                 10000 Drake                Rap Singer                                                                                           
+TJ Miller            22-MAY-21                  6000 Justin Bieber        Multi-instrumentalist Singer                                                                         
+TJ Miller            22-MAY-21                 10000 Drake                Rap Singer                                                                                           
+Elias Pettersson     02-AUG-21                  7000 Jay-Z                Rap Singer                                                                                           
+SQL> 
+SQL> 
+SQL> -- Solution for Question 3
+SQL> 
+SQL> set echo off;
+SQL> set feedback off;
+SQL> set LINESIZE 175;
+SQL> set pagesize 30;
+SQL> 
+SQL> column "Client First" format a20
+SQL> column "Client Last" format a20
+SQL> column "Stage Name" format a20
+SQL> column "Event Date" format 99-99-99
+SP2-0246: Illegal FORMAT string "99-99-99"
+SQL> select c.firstName as "Client First", c.lastName as "Client Last", e.stageName as "Stage Name", g.startDate as "Event Date"
+  2  from hn_client c
+  3  inner join hn_entertainerGig g on c.clientID = g.clientID
+  4  inner join hn_entertainer e on g.entertainerID = e.entertainerID
+  5  order by c.lastName, g.startDate;
+
+Client First         Client Last          Stage Name           Event Date/Time      Address                                                                                            
+-------------------- -------------------- -------------------- -------------------- --------------------------------------                                                                                          
+Eddie                Davis                Jeff Dunham          01-JUL-21 08:00 pm   1020 8 Ave SW, Calgary, AB                                                                                               
+Johnny               Gaudreau             Chris Rock           21-MAY-21 04:00 pm   555 Saddledome Rise SE, Calgary, AB                                                                                                    
+Johnny               Gaudreau             Drake                22-MAY-21 08:00 pm   555 Saddledome Rise SE, Calgary, AB                                                                                                   
+Auston               Matthews             Drake                02-AUG-21 06:00 pm   40 Bay St, Toronto, ON                                                                                                  
+TJ                   Miller               Justin Bieber        22-MAY-21 08:00 pm   215 8 Ave SE, Calgary, AB                                                                                                 
+TJ                   Miller               Drake                22-MAY-21 10:00 pm   215 8 Ave SE, Calgary, AB                                                                                                                                                                                                     
+Elias                Pettersson           Jay-Z                02-AUG-21 10:00 pm   1608 Commercial Dr, Vancouver, BC                                                                                                   
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Solution for Question 4
+SQL> 
+SQL> set echo off;
+SQL> set feedback off;
+SQL> set LINESIZE 175;
+SQL> set pagesize 30;
+SQL> 
+SQL> column "Total" format $99,999.99
+SQL> column "Most Expensive" format $99,999.99
+SQL> column "Average Price" format $99,999.99
+SQL> column "Number of Gigs" format 9
+SQL> select SUM(g.clientFee) as "Total", MAX(g.clientFee) as "Most Expensive", AVG(g.clientFee) as "Average Price", COUNT(g.entertainerID) as "Number of Gigs"
+  2  from hn_entertainerGig g
+  3  inner join hn_entertainer e on g.entertainerID = e.entertainerID;
+
+      Total Most Expensive Average Price Number                                                                                                                        
+----------- -------------- ------------- ------                                                                                                                        
+ $47,000.00     $10,000.00     $6,714.29      7                                                                                                                        
+SQL> 
+SQL> -- Solution for Question 5
+SQL> 
+SQL> 
+SQL> set echo off;
+SQL> set feedback off;
+SQL> set LINESIZE 175;
+SQL> set pagesize 30;
+SQL> 
+SQL> column "Stage Name" format a20
+SQL> column "Client ID" format 9
+SQL> column "Start Date" format a20
+SQL> column "Entertainer Fee" format 99999
+SQL> select e.stageName as "Stage Name", g.clientID as "Client ID", g.startDate as "Start Date", g.clientFee as "Entertainer Fee"
+  2  from hn_entertainerGig g
+  3  inner join hn_entertainer e on g.entertainerID = e.entertainerID
+  4  where g.clientFee > (select AVG(clientFee) from hn_entertainerGig);
+
+Stage Name           Client ID Start Date           Entertainer Fee                                                                                                            
+-------------------- --------- -------------------- ---------------                                                                                                            
+Drake                        2 22-MAY-21                       8000                                                                                                            
+Drake                        4 02-AUG-21                       6000                                                                                                            
+Jay-Z                        5 02-AUG-21                       5000                                                                                                            
+SQL> 
+SQL> 
+SQL> Spool off
