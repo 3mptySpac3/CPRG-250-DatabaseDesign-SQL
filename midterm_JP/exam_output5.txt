@@ -1,0 +1,72 @@
+SQL> spool
+currently spooling to C:\MidTermSpool\exam_output5.txt
+SQL> set echo on
+SQL> drop table mid_furniture;
+
+Table dropped.
+
+SQL> drop table mid_home;
+
+Table dropped.
+
+SQL> drop table mid_room;
+
+Table dropped.
+
+SQL> create table mid_room(
+  2    room_name varchar2(50) constraint sys_mid_room_pk primary key,
+  3    --owner_name varchar2(50) constraint sys_mid_room_fk
+  4      --references mid_home(owner_name),
+  5    wall_colour varchar2(50) not null
+  6  );
+
+Table created.
+
+SQL> 
+SQL> create table mid_home(
+  2    owner_name varchar2(50) constraint sys_mid_home_pk primary key,
+  3    room_name varchar2(50) constraint sys_mid_home_fk
+  4      references mid_room(room_name),
+  5    street varchar2(50) not null,
+  6    city varchar2(50) not null,
+  7    prov char(2) not null constraint sys_mid_home_prov_ck
+  8      check(prov in ('AB','BC','SK')),
+  9    postal_code char(6) not null
+ 10  );
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> create table mid_furniture(
+  2    furniture_name varchar2(50) constraint sys_mid_furniture_pk primary key,
+  3    room_name varchar2(50) constraint sys_mid_furniture_fk
+  4      references mid_room(room_name),
+  5    size_height number(4,1) not null constraint sys_mid_furniture_size_height_ck
+  6      check(size_height > 0 and size_height <= 9.99),
+  7    size_depth number (4,1) not null constraint sys_mid_furniture_size_depth_ck
+  8      check(size_depth > 0 and size_depth <= 9.99),
+  9    size_length number(4,1) not null constraint sys_mid_furniture_size_length_ck
+ 10      check(size_length > 0 and size_length <= 9.99)
+ 11  );
+
+Table created.
+
+SQL> 
+SQL> 
+SQL> alter table mid_furniture
+  2    add price number(8,2) constraint sys_mid_furniture_price_ck
+  3      check(price > 0 and price <=99999.99);
+
+Table altered.
+
+SQL> alter table mid_furniture
+  2    add purchase_date date not null;
+
+Table altered.
+
+SQL> 
+SQL> 
+SQL> spool off;
