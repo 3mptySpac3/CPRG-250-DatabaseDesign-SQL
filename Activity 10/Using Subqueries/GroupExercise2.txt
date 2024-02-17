@@ -1,0 +1,119 @@
+SQL> 
+SQL> --Q1-- 1.	     Which customers ordered the same books as customers in Texas? Show the book title, state and customer #.
+SQL> SELECT state, customer#, title
+  2    FROM customers join orders using (customer#) join orderitems using (order#)
+  3  	 join books using (isbn)
+  4    WHERE state  NOT IN
+  5  	 (SELECT state
+  6  	 FROM customers join orders using (customer#) join orderitems using (order#)
+  7  	   join books using (isbn)
+  8  	 WHERE state = 'TX')
+  9    AND title in
+ 10  	 (SELECT title
+ 11  	 FROM customers join orders using (customer#) join orderitems using (order#)
+ 12  	   join books using (isbn)
+ 13  	 WHERE state = 'TX')
+ 14  order by title;
+
+ST  CUSTOMER# TITLE                                                                                                     
+-- ---------- ------------------------------                                                                            
+MI       1017 BIG BEAR AND LITTLE DOVE                                                                                  
+FL       1015 BIG BEAR AND LITTLE DOVE                                                                                  
+FL       1001 DATABASE IMPLEMENTATION                                                                                   
+FL       1001 DATABASE IMPLEMENTATION                                                                                   
+NJ       1019 DATABASE IMPLEMENTATION                                                                                   
+IL       1011 DATABASE IMPLEMENTATION                                                                                   
+WY       1014 DATABASE IMPLEMENTATION                                                                                   
+FL       1003 E-BUSINESS THE EASY WAY                                                                                   
+GA       1018 REVENGE OF MICKEY                                                                                         
+WA       1005 REVENGE OF MICKEY                                                                                         
+MI       1017 REVENGE OF MICKEY                                                                                         
+
+11 rows selected.
+
+SQL> 
+SQL> --Q2-- which books have been ordered by customers in the greatest number of states?
+SQL> select distinct title, state
+  2  from customers join orders using (customer#) join orderitems using (order#)
+  3  	 join books using (isbn)
+  4  where isbn in
+  5  	 (select isbn
+  6  	 from customers join orders using(customer#) join orderitems using (order#)
+  7  	 group by isbn
+  8  	 having count(distinct state) =
+  9  	     (select max(count(distinct state))
+ 10  	     from customers join orders using(customer#) join orderitems using (order#)
+ 11  	     group by isbn))
+ 12  order by title, state;
+
+TITLE                          ST                                                                                       
+------------------------------ --                                                                                       
+COOKING WITH MUSHROOMS         FL                                                                                       
+COOKING WITH MUSHROOMS         ID                                                                                       
+COOKING WITH MUSHROOMS         NJ                                                                                       
+COOKING WITH MUSHROOMS         WA                                                                                       
+COOKING WITH MUSHROOMS         WY                                                                                       
+DATABASE IMPLEMENTATION        FL                                                                                       
+DATABASE IMPLEMENTATION        IL                                                                                       
+DATABASE IMPLEMENTATION        NJ                                                                                       
+DATABASE IMPLEMENTATION        TX                                                                                       
+DATABASE IMPLEMENTATION        WY                                                                                       
+
+10 rows selected.
+
+SQL> 
+SQL> --Q3--What book was ordered the most based on its quantity in orderitems?
+SQL> SELECT title
+  2  FROM customers
+  3  JOIN orders USING (customer#)
+  4  JOIN orderitems USING (order#)
+  5  JOIN books USING (isbn)
+  6  GROUP BY title
+  7  HAVING SUM(quantity) = (
+  8  	 SELECT MAX(total_quantity)
+  9  	 FROM (
+ 10  	     SELECT SUM(quantity) as total_quantity
+ 11  	     FROM customers
+ 12  	     JOIN orders USING (customer#)
+ 13  	     JOIN orderitems USING (order#)
+ 14  	     JOIN books USING (isbn)
+ 15  	     GROUP BY isbn
+ 16  	 )
+ 17  );
+
+TITLE                                                                                                                   
+------------------------------                                                                                          
+COOKING WITH MUSHROOMS                                                                                                  
+
+1 row selected.
+
+SQL> 
+SQL> --Q4--What was the most recent book ordered in each category and when was it ordered?
+SQL> SELECT b.category, b.title, MAX(o.orderdate) as Orderdate
+  2  FROM books b
+  3  JOIN orderitems oi ON b.isbn = oi.isbn
+  4  JOIN orders o ON oi.order# = o.order#
+  5  WHERE (b.category, o.orderdate) IN (
+  6  	 SELECT b2.category, MAX(o2.orderdate) as max_orderdate
+  7  	 FROM orders o2
+  8  	 JOIN orderitems oi2 ON o2.order# = oi2.order#
+  9  	 JOIN books b2 ON oi2.isbn = b2.isbn
+ 10  	 GROUP BY b2.category
+ 11  )
+ 12  GROUP BY b.category, b.title
+ 13  ORDER BY b.category;
+
+CATEGORY     TITLE                          ORDERDATE                                                                   
+------------ ------------------------------ ---------                                                                   
+BUSINESS     HOW TO MANAGE THE MANAGER      31-mar-09                                                                   
+CHILDREN     BIG BEAR AND LITTLE DOVE       04-apr-09                                                                   
+COMPUTER     DATABASE IMPLEMENTATION        05-apr-09                                                                   
+COOKING      COOKING WITH MUSHROOMS         05-apr-09                                                                   
+FAMILY LIFE  REVENGE OF MICKEY              05-apr-09                                                                   
+FITNESS      BODYBUILD IN 10 MINUTES A DAY  01-apr-09                                                                   
+LITERATURE   SHORTEST POEMS                 01-apr-09                                                                   
+
+7 rows selected.
+
+SQL> 
+SQL> spool off

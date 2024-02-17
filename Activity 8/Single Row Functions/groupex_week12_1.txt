@@ -1,0 +1,119 @@
+SQL> spool
+currently spooling to C:\spool\groupex_week12_1.txt
+SQL> set echo on
+SQL> set linesize 120
+SQL> set pagesize 66
+SQL> --Q1 --20% off all books, except those that already have a discount associated with them.
+SQL> 
+SQL> select isbn, initcap(title) "Title",
+  2    nvl2(discount, 'Fixed Discount','20% Discount') "Discount Type",
+  3    to_char(retail, '$9,990.00') "Orig Price",
+  4    to_char(nvl(discount, retail * 0.2), '$9,990.00') "Discount",
+  5    to_char(nvl(retail-discount, retail-retail * 0.2), '$9,990.00') "Final $"
+  6  from books
+  7  order by 2;
+
+ISBN       Title                          Discount Type  Orig Price Discount   Final $                                  
+---------- ------------------------------ -------------- ---------- ---------- ----------                               
+8117949391 Big Bear And Little Dove       20% Discount        $8.95      $1.79      $7.16                               
+1059831198 Bodybuild In 10 Minutes A Day  20% Discount       $30.95      $6.19     $24.76                               
+4981341710 Building A Car With Toothpicks Fixed Discount     $59.95      $3.00     $56.95                               
+3437212490 Cooking With Mushrooms         20% Discount       $19.95      $3.99     $15.96                               
+8843172113 Database Implementation        20% Discount       $55.95     $11.19     $44.76                               
+9959789321 E-Business The Easy Way        20% Discount       $54.50     $10.90     $43.60                               
+1915762492 Handcranked Computers          20% Discount       $25.00      $5.00     $20.00                               
+3957136468 Holy Grail Of Oracle           Fixed Discount     $75.95      $3.80     $72.15                               
+0132149871 How To Get Faster Pizza        Fixed Discount     $29.95      $1.50     $28.45                               
+9247381001 How To Manage The Manager      20% Discount       $31.95      $6.39     $25.56                               
+2491748320 Painless Child-Rearing         Fixed Discount     $89.95      $4.50     $85.45                               
+0401140733 Revenge Of Mickey              20% Discount       $22.00      $4.40     $17.60                               
+2147428890 Shortest Poems                 20% Discount       $39.95      $7.99     $31.96                               
+0299282519 The Wok Way To Cook            20% Discount       $28.75      $5.75     $23.00                               
+
+14 rows selected.
+
+SQL> 
+SQL> --Q2 --  Show all customer orders. Carefully note the formatting of the columns
+SQL> 
+SQL> select initcap(firstname) "First", initcap(lastname) "Last",
+  2    count(distinct authorid) "Number Authors"
+  3  from customers join orders using (customer#)
+  4    join orderitems using (order#)
+  5    join books using(isbn)
+  6    join bookauthor using(isbn)
+  7  group by firstname, lastname
+  8  having count(distinct authorid) >= 2
+  9  order by 2,1;
+
+First      Last       Number Authors                                                                                    
+---------- ---------- --------------                                                                                    
+Kenneth    Falah                   3                                                                                    
+Tammy      Giana                   5                                                                                    
+Cindy      Girard                  2                                                                                    
+Jasmine    Lee                     3                                                                                    
+Jake       Lucas                   4                                                                                    
+Reese      Mcgovern                3                                                                                    
+Greg       Montiasa                2                                                                                    
+Bonita     Morales                 6                                                                                    
+Becca      Nelson                  6                                                                                    
+Jennifer   Smith                   3                                                                                    
+Leila      Smith                   4                                                                                    
+
+11 rows selected.
+
+SQL> 
+SQL> 
+SQL> --Q3 -- Show each customer's book orders
+SQL> --and how old the book was when it was ordered by the number of months. Round the number of
+SQL> --months to the closest integer. Carefully note the formatting of the columns. Sort by last name and order#.
+SQL> 
+SQL> SELECT c.FirstName || ' ' || c.LastName AS Customer,
+  2         o.Order# AS "Order #",
+  3         b.Title AS "Book Title",
+  4         TO_CHAR(o.OrderDate, 'DD-MON-YY') AS "Order Date",
+  5         TO_CHAR(b.PubDate, 'DD-MON-YY') AS "Publication Date",
+  6         ROUND((o.OrderDate - b.PubDate) / 30) AS "Months Old"
+  7  FROM Orders o
+  8  JOIN Customers c ON o.Customer# = c.Customer#
+  9  JOIN OrderItems oi ON o.Order# = oi.Order#
+ 10  JOIN Books b ON oi.ISBN = b.ISBN
+ 11  ORDER BY c.LastName, o.Order#;
+
+CUSTOMER                 Order # Book Title                     Order Date         Publication Date   Months Old        
+--------------------- ---------- ------------------------------ ------------------ ------------------ ----------        
+KENNETH FALAH               1004 PAINLESS CHILD-REARING         01-APR-09          17-JUL-04                  57        
+KENNETH FALAH               1015 COOKING WITH MUSHROOMS         04-APR-09          28-FEB-04                  62        
+TAMMY GIANA                 1007 BIG BEAR AND LITTLE DOVE       02-APR-09          08-NOV-05                  41        
+TAMMY GIANA                 1007 E-BUSINESS THE EASY WAY        02-APR-09          01-MAR-06                  38        
+TAMMY GIANA                 1007 HOLY GRAIL OF ORACLE           02-APR-09          31-DEC-05                  40        
+TAMMY GIANA                 1007 DATABASE IMPLEMENTATION        02-APR-09          04-JUN-03                  71        
+TAMMY GIANA                 1014 REVENGE OF MICKEY              04-APR-09          14-DEC-05                  40        
+CINDY GIRARD                1000 COOKING WITH MUSHROOMS         31-MAR-09          28-FEB-04                  62        
+CINDY GIRARD                1009 REVENGE OF MICKEY              03-APR-09          14-DEC-05                  40        
+CINDY GIRARD                1009 COOKING WITH MUSHROOMS         03-APR-09          28-FEB-04                  62        
+KENNETH JONES               1020 COOKING WITH MUSHROOMS         05-APR-09          28-FEB-04                  62        
+JASMINE LEE                 1013 DATABASE IMPLEMENTATION        03-APR-09          04-JUN-03                  71        
+JAKE LUCAS                  1001 HOW TO MANAGE THE MANAGER      31-MAR-09          09-MAY-03                  72        
+JAKE LUCAS                  1001 PAINLESS CHILD-REARING         31-MAR-09          17-JUL-04                  57        
+JAKE LUCAS                  1011 PAINLESS CHILD-REARING         03-APR-09          17-JUL-04                  57        
+REESE MCGOVERN              1002 DATABASE IMPLEMENTATION        31-MAR-09          04-JUN-03                  71        
+GREG MONTIASA               1005 SHORTEST POEMS                 01-APR-09          01-MAY-05                  48        
+GREG MONTIASA               1019 REVENGE OF MICKEY              05-APR-09          14-DEC-05                  40        
+BONITA MORALES              1003 COOKING WITH MUSHROOMS         01-APR-09          28-FEB-04                  62        
+BONITA MORALES              1003 DATABASE IMPLEMENTATION        01-APR-09          04-JUN-03                  71        
+BONITA MORALES              1003 BODYBUILD IN 10 MINUTES A DAY  01-APR-09          21-JAN-05                  51        
+BONITA MORALES              1018 DATABASE IMPLEMENTATION        05-APR-09          04-JUN-03                  71        
+BONITA MORALES              1018 COOKING WITH MUSHROOMS         05-APR-09          28-FEB-04                  62        
+BECCA NELSON                1012 REVENGE OF MICKEY              03-APR-09          14-DEC-05                  40        
+BECCA NELSON                1012 PAINLESS CHILD-REARING         03-APR-09          17-JUL-04                  57        
+BECCA NELSON                1012 BIG BEAR AND LITTLE DOVE       03-APR-09          08-NOV-05                  41        
+BECCA NELSON                1012 HANDCRANKED COMPUTERS          03-APR-09          21-JAN-05                  51        
+THOMAS PIERSON              1008 COOKING WITH MUSHROOMS         02-APR-09          28-FEB-04                  62        
+STEVE SCHELL                1017 BIG BEAR AND LITTLE DOVE       04-APR-09          08-NOV-05                  41        
+LEILA SMITH                 1006 E-BUSINESS THE EASY WAY        01-APR-09          01-MAR-06                  38        
+JENNIFER SMITH              1010 DATABASE IMPLEMENTATION        03-APR-09          04-JUN-03                  71        
+LEILA SMITH                 1016 PAINLESS CHILD-REARING         04-APR-09          17-JUL-04                  57        
+
+32 rows selected.
+
+SQL> spool off
