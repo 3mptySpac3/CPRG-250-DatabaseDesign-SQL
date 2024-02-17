@@ -1,0 +1,16 @@
+SQL Report E
+
+This SQL code generates a report of customer phone numbers and emails for customers who are not tax exempt, sorted by customer number.
+
+The report retrieves data from the following tables:
+
+TMB_CUSTOMERS: contains customer information such as customer number, phone number, email, and tax exempt status
+TMB_ORDERS: contains order information such as the order number and the customer number associated with the order
+TMB_ORDER_ITEMS: contains information on the items included in each order, such as the order number and the product number
+TMB_PRODUCTS: contains product information such as the product number and the product price
+
+The WHERE clause filters for non-tax-exempt customers. The resulting report displays customer number, phone number, and email, sorted by customer number.
+
+***
+This can be useful for identifying customers who are not exempt from taxes and have made purchases from the company, along with their contact information such as phone number and email. This information can be used for various purposes, such as targeted marketing campaigns or follow-up customer service.
+***

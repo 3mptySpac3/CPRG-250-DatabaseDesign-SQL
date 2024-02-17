@@ -1,0 +1,12 @@
+README
+Sales Info by Province Report
+This SQL code generates a report, named "Report A - Sales Info by Province", that provides sales information of products by province, based on customer's location. The report includes details such as customer number, province, email, product title, maximum price, minimum price, and average price of the product. 
+
+The code includes formatting options for columns such as "Customer Number", "Prov", "Email", "Max", "Min", and "Average". The report is grouped by province and sorted by customer number. It also filters the data for the provinces of Alberta, British Columbia, Manitoba, and Quebec.
+
+To run the code, connect to the SQL database and execute the code. The output will be displayed on the screen.
+
+***
+This information can be useful for businesses operating in Canada to find out information on clients in a spacific province.
+Overall, the code is a powerful tool for analyzing and visualizing customer data, and can provide valuable insights for businesses operating in Canada.
+***

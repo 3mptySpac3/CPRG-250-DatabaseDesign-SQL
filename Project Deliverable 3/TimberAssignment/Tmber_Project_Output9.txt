@@ -1,0 +1,136 @@
+SQL> spool
+currently spooling to C:\TimberSpool\Tmber_Project_Output9.txt
+SQL> alter table tmb_order_items drop constraint sys_tmb_order_item_product_number_fk;
+SQL> alter table tmb_order_items drop constraint sys_tmb_order_item_order_number_fk;
+SQL> alter table tmb_reviews drop constraint sys_tmb_reviews_fk;
+SQL> alter table tmb_orders drop constraint sys_tmb_orders_customer_fk;
+SQL> alter table tmb_orders drop constraint sys_tmb_orders_fk;
+SQL> alter table tmb_orders drop constraint sys_tmb_orders_shipping_fk;
+SQL> alter table tmb_product_suppliers drop constraint sys_product_suppliers_fk;
+SQL> alter table tmb_product_suppliers drop constraint sys_product_suppliers_fk2;
+SQL> alter table tmb_products drop constraint sys_tmb_product_fk;
+SQL> drop table tmb_order_items;
+SQL> drop table tmb_reviews;
+SQL> drop table tmb_customers;
+SQL> drop table tmb_product_suppliers;
+SQL> drop table tmb_products;
+SQL> drop table tmb_supplier;
+SQL> drop table tmb_category;
+SQL> drop table tmb_orders;
+SQL> drop table tmb_shipping_rate;
+SQL> drop table tmb_tax_rate;
+SQL> create table tmb_tax_rate(
+  2    tax_rate_id number constraint sys_tmb_tax_rate_pk primary Key,
+  3    province char(2) not null constraint sys_tmb_tax_rate_province_ck
+  4      check (province in ('AB', 'BC', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'NL', 'NT', 'NU', 'PE', 'YT')),
+  5    tax_rate char(3) not null constraint sys_tmb_tax_rate_tax_rate_ck
+  6      check (tax_rate in ('HST', 'GST', 'PST'))
+  7  );
+SQL> create table tmb_shipping_rate(
+  2    shipping_rate_id number constraint sys_tmb_shipping_rate_pk primary key,
+  3    shipping_cost number(8,2) not null,
+  4    weight_kg varchar2(50) not null
+  5  );
+SQL> create table tmb_customers(
+  2    customer_number number constraint sys_tmb_customers_pk primary key,
+  3    address_ varchar2(60) not null,
+  4    city varchar2(50) not null,
+  5    province char(2) not null constraint sys_tmb_customers_province_ck
+  6      check ( province in ('AB', 'BC', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'NL', 'NT', 'NU', 'PE', 'YT')),
+  7    postal_code char(6) not null constraint sys_tmb_customers_postal_code_ck
+  8      check(postal_code like '[A-Z][0-9][A-Z][0-9][A-Z][0-9]'),
+  9    phone_number char(12) not null constraint sys_tmb_customers_phone_number_ck
+ 10      check(phone_number like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' or phone_number like '[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' or phone_number like '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
+ 11    email varchar(60) not null constraint sys_tmb_customers_email_ck
+ 12      check(email like '%@%'),
+ 13    review_date date null,
+ 14    timber_membership number(1) not null constraint sys_tmb_customers_timber_membership_ck
+ 15      check (timber_membership in (0,1)) ---1 means a member, 0 means not a member
+ 16  );
+SQL> create table tmb_supplier(
+  2    supplier_number number constraint sys_tmb_supplier_pk primary key,
+  3    supplier_name varchar2(50) not null,
+  4    email varchar2(50) not null,
+  5    city varchar2(50) not null,
+  6    province char(2) not null,
+  7    country char(2) not null,
+  8    country_subdivision_code varchar2(6) not null,
+  9    constraint sys_tmb_supplier_province_ck
+ 10      check ((country <> 'Canada') or( province in ('AB', 'BC', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'NL', 'NT', 'NU', 'PE', 'YT')))
+ 11  );
+SQL> 
+SQL> create table tmb_category(
+  2    category_number number constraint sys_tmb_category_pk primary key,
+  3    names varchar2(50) not null
+  4  );
+SQL> create table tmb_products(
+  2    product_number number constraint sys_tmb_product_pk primary key,
+  3    category_number number constraint sys_tmb_product_fk
+  4      references tmb_category (category_number),
+  5    title varchar2(60) not null,
+  6    description_ varchar2(200) not null,
+  7    price number(8,2) not null,
+  8    waight_kg number(4,1) not null,
+  9    tax_exempt_flag number(1),
+ 10    constraint sys_tmb_product_tax_exempt_flag_ck
+ 11      check(tax_exempt_flag in (0,1))
+ 12  );
+SQL> create table tmb_product_suppliers(
+  2    product_number number constraint sys_product_suppliers_fk
+  3      references tmb_products(product_number),
+  4    supplier_number number constraint sys_product_suppliers_fk2
+  5      references tmb_supplier(supplier_number),
+  6    quantity_on_hand number not null constraint sys_tmb_product_supplier_quantity_on_hand_ck
+  7      check (quantity_on_hand >= 0),
+  8    delivery_day number not null constraint sys_tmb_product_suppliers_delivery_day_ck
+  9      check (delivery_day >= 0),
+ 10    constraint sys_tmb_product_suppliers_pk primary key(product_number, supplier_number)
+ 11  );
+SQL> create table tmb_orders(
+  2    order_number number constraint sys_tmb_orders_pk primary key,
+  3    customer_number number constraint sys_tmb_orders_customer_fk --------EDITED HERE-------
+  4      references tmb_customers(customer_number)not null,
+  5    tax_rate_id number constraint sys_tmb_orders_fk --------EDITED HERE before tax_id.. now tax_rate_id-------
+  6      references tmb_tax_rate(tax_rate_id)not null, --------EDITED HERE-------
+  7    shipping_rate_id number constraint sys_tmb_orders_shipping_fk
+  8      references tmb_shipping_rate(shipping_rate_id)not null, --------EDITED HERE-------
+  9    order_date date not null,
+ 10    delivery_date date not null
+ 11  );
+SQL> create table tmb_order_items(
+  2    order_number number,
+  3    product_number number,
+  4    order_quantity number,
+  5    constraint sys_tmb_order_item_pk primary key(order_number,product_number)
+  6    );
+SQL> alter table tmb_order_items
+  2      add constraint sys_tmb_order_item_order_number_fk foreign key (order_number)
+  3        references tmb_orders(order_number);
+SQL>   alter table tmb_order_items
+  2      add constraint sys_tmb_order_item_product_number_fk foreign key (product_number)
+  3        references tmb_products(product_number);
+SQL>   alter table tmb_order_items
+  2      add constraint sys_tmb_order_item_order_quantity_ck
+  3        check (order_quantity > 0);
+SQL> create table tmb_reviews(
+  2    review_number number constraint sys_tmb_reviews_pk primary key,
+  3    customer_number number constraint sys_tmb_reviews_fk
+  4      references tmb_customers (customer_number),
+  5    product_number number constraint sys_tmb_reviews_product_fk
+  6      references tmb_products (product_number)
+  7      );
+SQL>  alter table tmb_reviews
+  2      add rating number(1,1) not null constraint sys_tmb_reviews_rating_ck
+  3        check (rating  >=1 and rating <=5 );
+SQL>   alter table tmb_reviews
+  2      add comments varchar2(200);
+SQL>   alter table tmb_reviews
+  2      add price number(8,2) not null constraint sys_tmb_reviews_price_ck
+  3        check (price >= 0);
+SQL>   alter table tmb_reviews
+  2      add waight number(4,1) not null constraint sys_tmb_reviews_waight_ck
+  3        check (waight >= 0);
+SQL>   alter table tmb_reviews
+  2      add tax_exempt_flag number(1) null constraint sys_tmb_reviews_tax_exempt_flag_ck
+  3        check (tax_exempt_flag in (0,1) or tax_exempt_flag is null);
+SQL> spool off

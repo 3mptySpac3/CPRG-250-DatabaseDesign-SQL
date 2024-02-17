@@ -1,0 +1,14 @@
+Project Deliverable 5
+
+This Read.me is to give a simple rundown of these folders.
+
+DESIGN: Contains physical and conceptual models of the "Timber" project, and gives a general overview of the interactions happening. 
+
+BUILD: Contains the build SQL for the "Timber" project; paste this into SQL Plus first.
+
+POPULATE: Contains the script to insert data into the build SQL; paste this into SQL Plus after content in the BUILD folder.
+
+REPORTS: Contains various quarries based on BUILD and POPULATE data; an example of the capacity of the created database.
+
+VERIFICATION: Recording... 
+

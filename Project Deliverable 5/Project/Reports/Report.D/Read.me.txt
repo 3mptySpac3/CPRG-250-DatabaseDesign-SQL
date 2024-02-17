@@ -1,0 +1,18 @@
+SQL Report D
+
+This SQL code generates a report (Report D) of the total amount spent by customers from provinces AB, BC, MB, and QC. It selects the customer_number and the total_amount from a subquery that joins the TMB_CUSTOMERS, TMB_ORDERS, TMB_ORDER_ITEMS, and TMB_PRODUCTS tables, and groups the results by customer_number. The final output is sorted in descending order by the total_amount.
+
+
+WHERE: The WHERE keyword is used to filter the rows returned by a query based on a specific condition. In this code, the WHERE keyword is used to filter customers based on their province of residence.
+
+COLUMN: The COLUMN keyword is used to format the output of a query by specifying the display format of a column. In this code, the COLUMN keyword is used to format the output of the customer_number and total_amount columns.
+
+SELECT: The SELECT keyword is used to retrieve data from one or more database tables. In this code, the SELECT keyword is used to retrieve the customer number and total amount for each customer who has placed an order from the specified provinces.
+
+JOIN: The JOIN keyword is used to combine rows from two or more tables based on a related column between them. In this code, the JOIN keyword is used to join the TMB_CUSTOMERS, TMB_ORDERS, TMB_ORDER_ITEMS, and TMB_PRODUCTS tables.
+
+SUBQUERY: A subquery is a query nested inside another query. In this code, the subquery is used to group the results by customer number and calculate the total amount spent by each customer, which is then used in the outer query to order the results by the total amount spent.
+
+***
+The code is useful for generating reports on customer spending in specific regions, which can help businesses analyze their target markets and make informed decisions about marketing strategies and product offerings. By identifying which customers are spending the most, businesses can also develop strategies for retaining these valuable customers and improving overall customer satisfaction.
+***

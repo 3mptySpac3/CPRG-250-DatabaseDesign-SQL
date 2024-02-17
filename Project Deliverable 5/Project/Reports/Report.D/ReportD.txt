@@ -1,0 +1,43 @@
+SQL> --Report D
+SQL> 
+SQL> 
+SQL> TTITLE left 'Report D'
+SQL> BTITLE left 'End of Report'
+SQL> column "Customer Number" format a10
+SQL> column "Total Amount" format a10
+SQL> Select customer_number, total_amount
+  2  From (
+  3    Select TMB_CUSTOMERS.customer_number AS customer_number,
+  4           SUM(TMB_ORDER_ITEMS.order_quantity * TMB_PRODUCTS.price) AS total_amount
+  5    From TMB_CUSTOMERS
+  6    Join TMB_ORDERS On TMB_CUSTOMERS.customer_number = TMB_ORDERS.customer_number
+  7    Join TMB_ORDER_ITEMS On TMB_ORDERS.order_number = TMB_ORDER_ITEMS.order_number
+  8    Join TMB_PRODUCTS On TMB_ORDER_ITEMS.product_number = TMB_PRODUCTS.product_number
+  9    Where province In ('AB', 'BC', 'MB', 'QC')
+ 10    Group By TMB_CUSTOMERS.customer_number
+ 11  ) subquery
+ 12  ORDER BY total_amount DESC;
+
+Report D                                                                                                                                                                                                
+CUSTOMER_NUMBER TOTAL_AMOUNT                                                                                                                                                                            
+--------------- ------------                                                                                                                                                                            
+             15       299.97                                                                                                                                                                            
+             12       189.94                                                                                                                                                                            
+             21        14.99                                                                                                                                                                            
+
+
+
+
+
+
+
+End of Report                                                                                                                                                                                           
+
+SQL> 
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off

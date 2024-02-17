@@ -1,0 +1,37 @@
+SQL> -- Report E
+SQL> 
+SQL> TTITLE left 'Report E'
+SQL> BTITLE left 'End of Report'
+SQL> column "Customer Number" format a10
+SQL> column "Phone Number" format a10
+SQL> column "Email" format a35
+SQL> SELECT TMB_CUSTOMERS.customer_number, TMB_CUSTOMERS.phone_number, TMB_CUSTOMERS.email
+  2  FROM TMB_CUSTOMERS
+  3  JOIN TMB_ORDERS ON TMB_CUSTOMERS.customer_number = TMB_ORDERS.customer_number
+  4  JOIN TMB_ORDER_ITEMS ON TMB_ORDERS.order_number = TMB_ORDER_ITEMS.order_number
+  5  JOIN TMB_PRODUCTS ON TMB_ORDER_ITEMS.product_number = TMB_PRODUCTS.product_number
+  6  WHERE tax_exempt_flag = 0
+  7  ORDER BY customer_number;
+
+Report E                                                                                                                                                                                                
+CUSTOMER_NUMBER PHONE_NUMBER EMAIL                                                                                                                                                                      
+--------------- ------------ -----------------------------------                                                                                                                                        
+             12 825-193-8409 Serah@gmail.com                                                                                                                                                            
+             12 825-193-8409 Serah@gmail.com                                                                                                                                                            
+             15 203-957-8803 Kim@gmail.com                                                                                                                                                              
+             21 123-904-8765 Karen@gmail.com                                                                                                                                                            
+
+
+
+
+
+
+End of Report                                                                                                                                                                                           
+
+SQL> 
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off

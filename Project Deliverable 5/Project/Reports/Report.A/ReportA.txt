@@ -1,0 +1,51 @@
+SQL> --Report A
+SQL> 
+SQL> TTITLE left 'Report A - Sales Info by Province'
+SQL> BTITLE left 'End of Report'
+SQL> column "Customer Number" format 99
+SQL> column "Prov" format a4
+SQL> column "Email" format a15
+SQL> column 'Max' format '$'99.99
+SP2-0158: unknown COLUMN option "99.99"
+SQL> column 'Min' format '$'99.99
+SP2-0158: unknown COLUMN option "99.99"
+SQL> column 'Average' format '$'99.99
+SP2-0158: unknown COLUMN option "99.99"
+SQL> compute sum of "Max" on price format
+SQL> compute sum of "Min" on price
+SQL> compute sum of "Average" on price
+SQL> break on province on report
+SQL> SELECT TMB_CUSTOMERS.customer_number as "Cust.Number", TMB_CUSTOMERS.province as "Prov",
+  2  TMB_CUSTOMERS.email as "Email", TMB_PRODUCTS.title as "Title",
+  3  max(TMB_PRODUCTS.price) as "Max", min(TMB_PRODUCTS.price) as "Min",
+  4  avg(TMB_PRODUCTS.price) as "Average"
+  5  FROM TMB_CUSTOMERS
+  6  JOIN TMB_ORDERS ON TMB_CUSTOMERS.customer_number = TMB_ORDERS.customer_number
+  7  JOIN TMB_ORDER_ITEMS ON TMB_ORDERS.order_number = TMB_ORDER_ITEMS.order_number
+  8  JOIN TMB_PRODUCTS ON TMB_ORDER_ITEMS.product_number = TMB_PRODUCTS.product_number
+  9  WHERE province IN ('AB', 'BC', 'MB', 'QC') AND TMB_PRODUCTS.price > 0
+ 10  GROUP BY TMB_CUSTOMERS.customer_number, TMB_CUSTOMERS.province, TMB_PRODUCTS.title, TMB_CUSTOMERS.email
+ 11  ORDER BY TMB_CUSTOMERS.customer_number;
+
+Report A - Sales Info by Province                                                                                                                                                                       
+Cust.Number Prov Email           Title                                      Max        Min    Average                                                                                                   
+----------- ---- --------------- ----------------------------------- ---------- ---------- ----------                                                                                                   
+         12 BC   Serah@gmail.com Call of Duty Modern III                  89.99      89.99      89.99                                                                                                   
+         12 BC   Serah@gmail.com Mincraft                                 19.99      19.99      19.99                                                                                                   
+         15 QC   Kim@gmail.com   All Ghibli OST                           99.99      99.99      99.99                                                                                                   
+         21 AB   Karen@gmail.com 1984                                     14.99      14.99      14.99                                                                                                   
+
+
+
+
+
+
+End of Report                                                                                                                                                                                           
+
+SQL> 
+SQL> Commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off

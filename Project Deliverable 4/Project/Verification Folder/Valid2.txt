@@ -1,0 +1,198 @@
+SQL> spool
+currently spooling to C:\ProjectD4\Valid2.txt
+SQL> set echo on
+SQL> select * from  tmb_product_suppliers;
+
+PRODUCT_NUMBER SUPPLIER_NUMBER QUANTITY_ON_HAND DELIVERY_DAY                                                                                                                                            
+-------------- --------------- ---------------- ------------                                                                                                                                            
+          1935        38592038                5            3                                                                                                                                            
+          2394        28439567                3            3                                                                                                                                            
+          5869         2948532                1            7                                                                                                                                            
+          3395        28439567               10            2                                                                                                                                            
+          2834        38592038                6           10                                                                                                                                            
+          6032         2948532                2            8                                                                                                                                            
+          1123        38592038                3            5                                                                                                                                            
+
+7 rows selected.
+
+SQL> select * from tmb_shipping_rate;
+
+SHIPPING_RATE_ID SHIPPING_COST  WAIGHT_KG                                                                                                                                                               
+---------------- ------------- ----------                                                                                                                                                               
+              99          9.95          1                                                                                                                                                               
+              88          9.95          1                                                                                                                                                               
+              77         39.95         10                                                                                                                                                               
+              66          9.95          1                                                                                                                                                               
+              55          9.95          1                                                                                                                                                               
+              44          9.95          1                                                                                                                                                               
+              33         19.95          5                                                                                                                                                               
+
+7 rows selected.
+
+SQL> select * from tmb_tax_rate;
+
+TAX_RATE_ID PR TAX                                                                                                                                                                                      
+----------- -- ---                                                                                                                                                                                      
+      12345 AB GST                                                                                                                                                                                      
+      12346 BC PST                                                                                                                                                                                      
+      12347 ON HST                                                                                                                                                                                      
+      12348 QC GST                                                                                                                                                                                      
+      12349 AB GST                                                                                                                                                                                      
+      12341 BC PST                                                                                                                                                                                      
+      11234 AB GST                                                                                                                                                                                      
+
+7 rows selected.
+
+SQL> select * from tmb_customers;
+
+CUSTOMER_NUMBER ADDRESS_                                                                                                                                                                                
+--------------- ----------------------------------------------------------------------------------------------------                                                                                    
+CITY                                                                                                 PR POSTAL PHONE_NUMBER                                                                             
+---------------------------------------------------------------------------------------------------- -- ------ ------------                                                                             
+EMAIL                                                                                                REVIEW_DA TIMBER_MEMBERSHIP                                                                        
+---------------------------------------------------------------------------------------------------- --------- -----------------                                                                        
+             33 1251 Random Close                                                                                                                                                                       
+Red Deer                                                                                             AB T4B9A4 587-123-4985                                                                             
+John@gmail.com                                                                                       03-DEC-22                 1                                                                        
+                                                                                                                                                                                                        
+             12 583 John John Road                                                                                                                                                                      
+Mississippi                                                                                          BC A7AO82 825-193-8409                                                                             
+Serah@gmail.com                                                                                      06-FEB-22                 1                                                                        
+                                                                                                                                                                                                        
+              9 8893 Bayside SW                                                                                                                                                                         
+Chicken Vill                                                                                         ON Y9Y3O4 403-691-0036                                                                             
+Ligma@gmail.com                                                                                      06-JUN-22                 0                                                                        
+                                                                                                                                                                                                        
+             15 North Side SW                                                                                                                                                                           
+Farm Vill                                                                                            QC P4F3M9 203-957-8803                                                                             
+Kim@gmail.com                                                                                        27-SEP-22                 1                                                                        
+                                                                                                                                                                                                        
+             21 Angry Street                                                                                                                                                                            
+Pighouse                                                                                             AB T4B3K8 123-904-8765                                                                             
+Karen@gmail.com                                                                                      01-APR-22                 0                                                                        
+                                                                                                                                                                                                        
+
+5 rows selected.
+
+SQL> select * from tmb_reviews;
+
+REVIEW_NUMBER CUSTOMER_NUMBER PRODUCT_NUMBER      PRICE     RATING                                                                                                                                      
+------------- --------------- -------------- ---------- ----------                                                                                                                                      
+COMMENTS                                                                                                                                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ WAIGHT_KG TAX_EXEMPT_FLAG                                                                                                                                                                              
+---------- ---------------                                                                                                                                                                              
+            1              33           1935      12.99          5                                                                                                                                      
+Beyond amazing...                                                                                                                                                                                       
+         1               0                                                                                                                                                                              
+                                                                                                                                                                                                        
+            2              12           2394      89.99          4                                                                                                                                      
+Pretty Cool!                                                                                                                                                                                            
+         1               0                                                                                                                                                                              
+                                                                                                                                                                                                        
+            3               9           5869      25.99          3                                                                                                                                      
+It was ok.                                                                                                                                                                                              
+        10               1                                                                                                                                                                              
+                                                                                                                                                                                                        
+            4              15           3395      99.99          2                                                                                                                                      
+Dissapointed...                                                                                                                                                                                         
+         1               0                                                                                                                                                                              
+                                                                                                                                                                                                        
+            5              21           2834      14.99          1                                                                                                                                      
+Manager...Now...                                                                                                                                                                                        
+         1               0                                                                                                                                                                              
+                                                                                                                                                                                                        
+
+5 rows selected.
+
+SQL> select * from tmb_order_items;
+
+no rows selected
+
+SQL> select * from tmb_orders;
+
+ORDER_NUMBER CUSTOMER_NUMBER TAX_RATE_ID SHIPPING_RATE_ID ORDER_DAT DELIVERY_                                                                                                                           
+------------ --------------- ----------- ---------------- --------- ---------                                                                                                                           
+         238              33       12345               99 01-JAN-22 04-JAN-22                                                                                                                           
+         384              12       12346               88 01-JAN-22 04-JAN-22                                                                                                                           
+         857               9       12347               77 01-JAN-22 08-JAN-22                                                                                                                           
+         239              15       12348               66 01-JAN-22 03-JAN-22                                                                                                                           
+         839              21       12349               55 01-JAN-22 11-MAY-22                                                                                                                           
+         125              12       12341               44 01-JAN-22 05-JAN-22                                                                                                                           
+         928               9       11234               33 01-JAN-22 10-JAN-22                                                                                                                           
+
+7 rows selected.
+
+SQL> select * from tmb_products;
+
+PRODUCT_NUMBER CATEGORY_NUMBER TITLE                                                                                                                                                                    
+-------------- --------------- ------------------------------------------------------------                                                                                                             
+DESCRIPTION_                                                                                                                                                                                            
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     PRICE  WAIGHT_KG TAX_EXEMPT_FLAG                                                                                                                                                                   
+---------- ---------- ---------------                                                                                                                                                                   
+          1935             101 To Kill A Mockingbird                                                                                                                                                    
+Great, Fun, Must read                                                                                                                                                                                   
+     12.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+          2394             102 Call of Duty Modern Warfare III                                                                                                                                          
+Graphic, CD                                                                                                                                                                                             
+     89.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+          5869             103 Mona Lisa                                                                                                                                                                
+Priceless                                                                                                                                                                                               
+     25.99         10               1                                                                                                                                                                   
+                                                                                                                                                                                                        
+          3395             104 All Ghibli OST                                                                                                                                                           
+GOAT, Record                                                                                                                                                                                            
+     99.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+          2834             101 1984                                                                                                                                                                     
+Cool, Nice                                                                                                                                                                                              
+     14.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+          4956             102 Mincraft                                                                                                                                                                 
+Best, CD                                                                                                                                                                                                
+     19.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+          6032             103 Starring Night                                                                                                                                                           
+Priceless                                                                                                                                                                                               
+     21.99          5               1                                                                                                                                                                   
+                                                                                                                                                                                                        
+          1123             104 Triller Vinyl MJ                                                                                                                                                         
+The Best Record                                                                                                                                                                                         
+     38.99          1               0                                                                                                                                                                   
+                                                                                                                                                                                                        
+
+8 rows selected.
+
+SQL> select * from tmb_supplier;
+
+SUPPLIER_NUMBER SUPPLIER_NAME                                      EMAIL                                                                                                                                
+--------------- -------------------------------------------------- ----------------------------------------------------------------------------------------------------                                 
+CITY                                                                                                 PR CO COUNTR                                                                                       
+---------------------------------------------------------------------------------------------------- -- -- ------                                                                                       
+       28439567 John John Contracting and Ship.                    JohnJohnCon@gmail.com                                                                                                                
+John Vill                                                                                            AB CA AB-01                                                                                        
+                                                                                                                                                                                                        
+        2948532 Impossibly Good Shipping.co                        GoodGoods@gmail.com                                                                                                                  
+Vancouver                                                                                            BC CA BC-03                                                                                        
+                                                                                                                                                                                                        
+       38592038 Dream Shipping                                     SleepNowShipLater@gmail.com                                                                                                          
+LA                                                                                                   ON CA ON-09                                                                                        
+                                                                                                                                                                                                        
+
+3 rows selected.
+
+SQL> select * from tmb_category;
+
+CATEGORY_NUMBER NAMES                                                                                                                                                                                   
+--------------- ----------------------------------------------------------------------------------------------------                                                                                    
+            101 Books                                                                                                                                                                                   
+            102 Games                                                                                                                                                                                   
+            103 Art                                                                                                                                                                                     
+            104 Music                                                                                                                                                                                   
+
+4 rows selected.
+
+SQL> spool off
