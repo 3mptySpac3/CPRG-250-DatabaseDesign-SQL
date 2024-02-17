@@ -1,0 +1,48 @@
+SQL> 
+SQL> set linesize 150;
+SQL> 
+SQL> 
+SQL> 
+SQL> column "# of destinations" format 999
+SQL> column "Total" format 999,999.99
+SQL> select vt.tour_description as "Tour", count(td.dest_code) as "# of Destinations", sum(d.price) as "Total"
+  2  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  3  where vt.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code
+  5  group by vt.tour_code, vt.tour_description
+  6  having count(td.dest_code) > 3
+  7  order by vt.tour_code;
+
+Tour                                               # of Destinations       Total                                                                      
+-------------------------------------------------- ----------------- -----------                                                                      
+Paris Highlights                                                   4      370.63                                                                      
+Paris Culture Tour                                                 4      792.90                                                                      
+France in 4 Days                                                   4      748.41                                                                      
+Palm Springs Adventure                                             4    1,390.45                                                                      
+Palm Springs Highlights                                            4      336.17                                                                      
+European Vacation                                                  5    1,299.47                                                                      
+Rocky Mountain Experience                                          5    1,100.60                                                                      
+Sights of Barcelona                                                4      917.43                                                                      
+Calgary Adventure                                                  4      467.87                                                                      
+
+9 rows selected.
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> select sum(d.price) as "Total For all Customers"
+  2  from rcv_tour_customer tc, rcv_tour_destination td, rcv_destination d
+  3  where tc.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code;
+
+Total For all Customers                                                                                                                               
+-----------------------                                                                                                                               
+               13651.79                                                                                                                               
+
+SQL> 
+SQL> Commit;
+
+Commit complete.
+
+SQL> 
+SQL> Spool off;

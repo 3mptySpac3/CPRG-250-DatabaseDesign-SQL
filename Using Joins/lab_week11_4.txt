@@ -1,0 +1,339 @@
+SQL> spool
+currently spooling to C:\spool\lab_week11_4.txt
+SQL> /*
+SQL> This SQL code retrieves information about a specific customer named Sheldon Cooper and the tours and destinations he has booked.
+SQL> The code uses a subquery to join several tables (rcv_customer, rcv_tour_customer, rcv_vacation_tour, rcv_tour_destination,
+SQL> and rcv_destination) to retrieve the necessary information.
+SQL> 
+SQL> */
+SQL> 
+SQL> set linesize 200;
+SQL> 
+SQL> SQL> select
+SP2-0734: unknown command beginning "SQL> selec..." - rest of line ignored.
+SQL>   2    case
+SQL>   3      when row_num = 1 then first_name
+SQL>   4      else ''
+SQL>   5    end as "First Name",
+SQL>   6    case
+SQL>   7      when row_num = 1 THEN last_name
+SQL>   8      else ''
+SQL>   9    end as "Last Name",
+SQL>  10    tour_description as "Tour Description",
+SQL>  11    order# as "Order#",
+SQL>  12    dest_description as "Destination Description"
+SQL>  13  from (
+SQL>  14    select
+SQL>  15      c.last_name,
+SQL>  16      c.first_name,
+SQL>  17      v.tour_description,
+SQL>  18      d.dest_description,
+SQL>  19      t.order#,
+SQL>  20      ROW_NUMBER() over (order by v.tour_description, t.order#) as row_num
+SQL>  21    from rcv_customer c
+SQL>  22    join rcv_tour_customer tc on c.customer_number = tc.customer_number
+SQL>  23    join rcv_vacation_tour v on tc.tour_code = v.tour_code
+SQL>  24    join rcv_tour_destination t on v.tour_code = t.tour_code
+SQL>  25    join rcv_destination d on t.dest_code = d.dest_code
+SQL>  26    where c.last_name = 'Cooper' and c.first_name = 'Sheldon'
+SQL>  27    order by v.tour_description, t.order#
+SQL>  28  ) subquery;
+SQL> 
+SQL> 
+SQL>  --Number 1.
+SQL>  /*
+SQL>  This query retrieves vacation tour information for a customer named Sheldon Cooper. It uses the ROW_NUMBER function
+SQL>  to assign a row number to each tour, and selects only the first tour for each customer. It then sorts the result by
+SQL>  tour description and order number.
+SQL>  */
+SQL> COLUMN "Tour Description" FORMAT A30
+SQL> 
+SQL> select
+  2    case
+  3      when row_num = 1 then first_name
+  4      else ''
+  5    end as "First Name",
+  6    case
+  7      when row_num = 1 then last_name
+  8      else ''
+  9    end as "Last Name",
+ 10    TRIM(tour_description) as "Tour Description",
+ 11    order# as "Order#",
+ 12    dest_description as "Destination Description"
+ 13  from (
+ 14    select
+ 15      c.first_name,
+ 16      c.last_name,
+ 17      v.tour_description,
+ 18      t.order#,
+ 19      d.dest_description,
+ 20      ROW_NUMBER() over (partition by c.first_name, c.last_name order by v.tour_description, t.order#) as row_num
+ 21    from rcv_customer c
+ 22    join rcv_tour_customer using (customer_number)
+ 23    join rcv_vacation_tour v using (tour_code)
+ 24    join rcv_tour_destination t using (tour_code)
+ 25    join rcv_destination d using (dest_code)
+ 26    where c.last_name = 'Cooper' and c.first_name = 'Sheldon'
+ 27  ) subquery
+ 28  order by "Tour Description", "Order#";
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+Sheldon                        Cooper                         Calgary Highlights                      1                                                                                                 
+Calgary City Sightseeing Tour                                                                                                                                                                           
+                                                                                                                                                                                                        
+                                                              Calgary Highlights                      2                                                                                                 
+Sulfur Mountain Gondola and Banff Hot Springs                                                                                                                                                           
+                                                                                                                                                                                                        
+                                                              Calgary Highlights                      3                                                                                                 
+Heritage Park - the 1883 experience                                                                                                                                                                     
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Calgary Stampede                        1                                                                                                 
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                                                                                                                                 
+                                                                                                                                                                                                        
+                                                              Calgary Stampede                        2                                                                                                 
+Calgary Stampede - Day pass Rodeo                                                                                                                                                                       
+                                                                                                                                                                                                        
+                                                              Calgary Stampede                        3                                                                                                 
+Calgary City Sightseeing Tour                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Paris Highlights                        1                                                                                                 
+Skip the Line Ticket: Eiffel Tower Summit Priority Access with Host                                                                                                                                     
+                                                                                                                                                                                                        
+                                                              Paris Highlights                        2                                                                                                 
+Gourmet Dinner & Sightseeing Cruise                                                                                                                                                                     
+                                                                                                                                                                                                        
+                                                              Paris Highlights                        3                                                                                                 
+Bateaux Parisiens Seine River Cruise                                                                                                                                                                    
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Paris Highlights                        4                                                                                                 
+Disneyland Paris 1-Day Ticket                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+10 rows selected.
+
+SQL> 
+SQL> 
+SQL> /*
+SQL> This SQL query selects data from several tables and returns the first and last name of a specific customer,
+SQL> the tour description, order number, and destination description.
+SQL> 
+SQL> */
+SQL> 
+SQL> --Number 2.
+SQL> COLUMN "Tour Description" FORMAT A30
+SQL> 
+SQL> select
+  2    case
+  3      when row_num = 1 then first_name
+  4      else ''
+  5    end as "First Name",
+  6    case
+  7      when row_num = 1 then last_name
+  8      else ''
+  9    end as "Last Name",
+ 10    TRIM(tour_description) as "Tour Description",
+ 11    order# as "Order#",
+ 12    dest_description as "Destination Description"
+ 13  from (
+ 14    select
+ 15      c.first_name,
+ 16      c.last_name,
+ 17      v.tour_description,
+ 18      d.dest_description,
+ 19      t.order#,
+ 20      ROW_NUMBER() over (order by v.tour_description, t.order#) as row_num
+ 21    from rcv_customer c, rcv_tour_customer tc, rcv_vacation_tour v, rcv_tour_destination t, rcv_destination d
+ 22    where c.customer_number = tc.customer_number
+ 23      and tc.tour_code = v.tour_code
+ 24      and v.tour_code = t.tour_code
+ 25      and t.dest_code = d.dest_code
+ 26      and c.last_name = 'Cooper' and c.first_name = 'Sheldon'
+ 27  ) subquery
+ 28  order by "Tour Description", "Order#";
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+Sheldon                        Cooper                         Calgary Highlights                      1                                                                                                 
+Calgary City Sightseeing Tour                                                                                                                                                                           
+                                                                                                                                                                                                        
+                                                              Calgary Highlights                      2                                                                                                 
+Sulfur Mountain Gondola and Banff Hot Springs                                                                                                                                                           
+                                                                                                                                                                                                        
+                                                              Calgary Highlights                      3                                                                                                 
+Heritage Park - the 1883 experience                                                                                                                                                                     
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Calgary Stampede                        1                                                                                                 
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                                                                                                                                 
+                                                                                                                                                                                                        
+                                                              Calgary Stampede                        2                                                                                                 
+Calgary Stampede - Day pass Rodeo                                                                                                                                                                       
+                                                                                                                                                                                                        
+                                                              Calgary Stampede                        3                                                                                                 
+Calgary City Sightseeing Tour                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Paris Highlights                        1                                                                                                 
+Skip the Line Ticket: Eiffel Tower Summit Priority Access with Host                                                                                                                                     
+                                                                                                                                                                                                        
+                                                              Paris Highlights                        2                                                                                                 
+Gourmet Dinner & Sightseeing Cruise                                                                                                                                                                     
+                                                                                                                                                                                                        
+                                                              Paris Highlights                        3                                                                                                 
+Bateaux Parisiens Seine River Cruise                                                                                                                                                                    
+                                                                                                                                                                                                        
+
+First Name                     Last Name                      Tour Description                   Order#                                                                                                 
+------------------------------ ------------------------------ ------------------------------ ----------                                                                                                 
+Destination Description                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------                                                                                                    
+                                                              Paris Highlights                        4                                                                                                 
+Disneyland Paris 1-Day Ticket                                                                                                                                                                           
+                                                                                                                                                                                                        
+
+10 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --Number 3.
+SQL> 
+SQL> /*
+SQL> This query retrieves the names of customers who have visited a destination in Canada. It uses LEFT JOIN to join
+SQL> the destination, tour destination, vacation tour, tour customer, and customer tables. It selects only the
+SQL> customers who have visited Canada and sorts the result by destination description, first name, and last name.
+SQL> */
+SQL> select distinct
+  2    d.dest_description as "Destination",
+  3    c.first_name as "First Name",
+  4    c.last_name as "Last Name"
+  5  from rcv_destination d
+  6  left join rcv_tour_destination t on d.dest_code = t.dest_code
+  7  left join rcv_vacation_tour v on t.tour_code = v.tour_code
+  8  left join rcv_tour_customer tc on v.tour_code = tc.tour_code
+  9  left join rcv_customer c on tc.customer_number = c.customer_number
+ 10  where d.country = 'Canada'
+ 11  order by d.dest_description, c.first_name, c.last_name;
+
+Destination                                                                                          First Name                     Last Name                                                           
+---------------------------------------------------------------------------------------------------- ------------------------------ ------------------------------                                      
+2-Hour Horseback Trail Ride in Kananaskis                                                            Lionel                         Messie                                                              
+Blackshale Suspension Bridge & Sightseeing Tour                                                                                                                                                         
+Calgary City Sightseeing Tour                                                                        Amy                            Folwer                                                              
+Calgary City Sightseeing Tour                                                                        Bernadette                     Rostenkowski-Wolowitz                                               
+Calgary City Sightseeing Tour                                                                        Lionel                         Messie                                                              
+Calgary City Sightseeing Tour                                                                        Penny                          Hofstadter                                                          
+Calgary City Sightseeing Tour                                                                        Raj                            Koothrappali                                                        
+Calgary City Sightseeing Tour                                                                        Sheldon                        Cooper                                                              
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                              Amy                            Folwer                                                              
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                              Bernadette                     Rostenkowski-Wolowitz                                               
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                              Penny                          Hofstadter                                                          
+
+Destination                                                                                          First Name                     Last Name                                                           
+---------------------------------------------------------------------------------------------------- ------------------------------ ------------------------------                                      
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                              Raj                            Koothrappali                                                        
+Calgary Stampede - Chuckwagon Races and Grandstand Show                                              Sheldon                        Cooper                                                              
+Calgary Stampede - Day pass Rodeo                                                                    Amy                            Folwer                                                              
+Calgary Stampede - Day pass Rodeo                                                                    Bernadette                     Rostenkowski-Wolowitz                                               
+Calgary Stampede - Day pass Rodeo                                                                    Penny                          Hofstadter                                                          
+Calgary Stampede - Day pass Rodeo                                                                    Raj                            Koothrappali                                                        
+Calgary Stampede - Day pass Rodeo                                                                    Sheldon                        Cooper                                                              
+Calgary to Royal Tyrell Museum | Drumheller | Badland – Private Sightseeing Tour                                                                                                                      
+Cycling the Bow                                                                                                                                                                                         
+Heritage Park - the 1883 experience                                                                  Amy                            Folwer                                                              
+Heritage Park - the 1883 experience                                                                  Penny                          Hofstadter                                                          
+
+Destination                                                                                          First Name                     Last Name                                                           
+---------------------------------------------------------------------------------------------------- ------------------------------ ------------------------------                                      
+Heritage Park - the 1883 experience                                                                  Sheldon                        Cooper                                                              
+Heritage Park - the 1883 experience                                                                                                                                                                     
+Lake Louise & Yoho N.P & Moraine Lake 1-Day Tour from Calgary or Banff                                                                                                                                  
+Rock climbing at COP                                                                                                                                                                                    
+Rocky Mountaineer - 3 Day Train Adventure                                                            Lionel                         Messie                                                              
+Sulfur Mountain Gondola and Banff Hot Springs                                                        Amy                            Folwer                                                              
+Sulfur Mountain Gondola and Banff Hot Springs                                                        Lionel                         Messie                                                              
+Sulfur Mountain Gondola and Banff Hot Springs                                                        Penny                          Hofstadter                                                          
+Sulfur Mountain Gondola and Banff Hot Springs                                                        Sheldon                        Cooper                                                              
+Voyageur Canoe Tour                                                                                  Lionel                         Messie                                                              
+
+32 rows selected.
+
+SQL> 
+SQL> 
+SQL> --Number 4.
+SQL> /*
+SQL> This query retrieves agent training information. It uses the LAG function to compare the values of the current
+SQL> row with the previous row and selects only the first occurrence of each agent's name. It then sorts the result
+SQL> by first name, last name, training description, and date completed.
+SQL> 
+SQL> */
+SQL> 
+SQL> select
+  2    case
+  3      when first_name = LAG(first_name) over (order by first_name, last_name, training_description, date_completed) then ''
+  4      else first_name
+  5    end as "First Name",
+  6    case
+  7      when last_name = LAG(last_name) over (order by first_name, last_name, training_description, date_completed) then ''
+  8      else last_name
+  9    end as "Last Name",
+ 10    training_description as "Training Description",
+ 11    TO_CHAR(date_completed, 'DD-MON-YY') as "Date Completed"
+ 12  from (
+ 13    select
+ 14      a.first_name,
+ 15      a.last_name,
+ 16      r.training_description,
+ 17      t.date_completed
+ 18    from rcv_agent a
+ 19    natural join rcv_agent_training t
+ 20    natural join rcv_training r
+ 21  ) subquery
+ 22  order by first_name, last_name, training_description, date_completed;
+
+First Name Last Name  Training Description                               Date Completed                                                                                                                 
+---------- ---------- -------------------------------------------------- ------------------                                                                                                             
+Anna       Chapman    Building client relationships                      08-MAY-22                                                                                                                      
+                      Customer Relations                                 01-MAY-22                                                                                                                      
+                      Dealing with difficult customers                   01-OCT-22                                                                                                                      
+                      Touring Europe                                     02-OCT-22                                                                                                                      
+Ethan      Hunt       Building client relationships                      08-MAY-22                                                                                                                      
+                      Customer Relations                                 01-MAY-22                                                                                                                      
+                      Touring the US                                     01-SEP-22                                                                                                                      
+Valerie    Plume      Building client relationships                      08-MAY-22                                                                                                                      
+                      Customer Relations                                 01-MAY-22                                                                                                                      
+                      Dealing with difficult customers                   01-OCT-22                                                                                                                      
+                      Touring the US                                     01-SEP-22                                                                                                                      
+
+11 rows selected.
+
+SQL> spool off
