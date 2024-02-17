@@ -1,0 +1,130 @@
+SQL> 
+SQL> 
+SQL> --delete existing data from tables, children followed parents
+SQL> delete ghc_expertise;
+
+9 rows deleted.
+
+SQL> delete ghc_course;
+
+5 rows deleted.
+
+SQL> delete ghc_faculty;
+
+4 rows deleted.
+
+SQL> delete ghc_department;
+
+2 rows deleted.
+
+SQL> 
+SQL> -- insert data, parents followed by children
+SQL> 
+SQL> insert into ghc_department (dept_no, dept_name)
+  2  	 values(100,'Astrophysics');
+
+1 row created.
+
+SQL> 
+SQL> insert into ghc_faculty (faculty_id, firstname, surname, date_hired, date_fired, is_active, dept_no)
+  2  	 values(1001,'Danny','Faulkner','01-JAN-02',NULL,1,100);
+
+1 row created.
+
+SQL> 
+SQL> insert into ghc_course (course_code,course_title,credits)
+  2  	 values('APHY202','The Solar System',5);
+
+1 row created.
+
+SQL> insert into ghc_course (course_code,course_title,credits)
+  2  	 values('APHY203','Nebula',5);
+
+1 row created.
+
+SQL> insert into ghc_course (course_code,course_title,credits)
+  2  	 values('APHY204','Global Cluters',5);
+
+1 row created.
+
+SQL> 
+SQL> insert into ghc_expertise (faculty_id, course_code)
+  2  	 values(1001, 'APHY202');
+
+1 row created.
+
+SQL> insert into ghc_expertise (faculty_id, course_code)
+  2  	 values(1001, 'APHY203');
+
+1 row created.
+
+SQL> insert into ghc_expertise (faculty_id, course_code)
+  2  	 values(1001, 'APHY204');
+
+1 row created.
+
+SQL> 
+SQL> -- add new row for ghc_course to update and replace old row
+SQL> insert into ghc_course (course_code,course_title,credits)
+  2  	 values('APHY302','Nebula',5);
+
+1 row created.
+
+SQL> 
+SQL> update ghc_expertise
+  2  	 set course_code = 'APHY302'
+  3  	 where faculty_id = 1001 AND course_code = 'APHY203';
+
+1 row updated.
+
+SQL> 
+SQL> delete from ghc_course
+  2  	 where course_code = 'APHY203';
+
+1 row deleted.
+
+SQL> 
+SQL> -- delete Danny Faulker
+SQL> 
+SQL> delete from ghc_expertise
+  2  	 where faculty_id = 1001;
+
+3 rows deleted.
+
+SQL> 
+SQL> delete from ghc_faculty
+  2  	 where faculty_id = 1001;
+
+1 row deleted.
+
+SQL> 
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> select * from ghc_department;
+
+   DEPT_NO DEPT_NAME                                                            
+---------- --------------------                                                 
+       100 Astrophysics                                                         
+
+SQL> select * from ghc_course;
+
+COURSE_ COURSE_TITLE                                                    CREDITS 
+------- ------------------------------------------------------------ ---------- 
+APHY202 The Solar System                                                      5 
+APHY204 Global Cluters                                                        5 
+APHY302 Nebula                                                                5 
+
+SQL> select * from ghc_expertise;
+
+no rows selected
+
+SQL> select * from ghc_faculty;
+
+no rows selected
+
+SQL> 
+SQL> spool off;

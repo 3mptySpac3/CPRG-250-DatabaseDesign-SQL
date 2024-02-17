@@ -1,0 +1,307 @@
+SQL> spool
+currently spooling to C:\spool\subway1.txt
+SQL> 
+SQL> set echo on
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> --QUESTION 1'S
+SQL> 
+SQL> --1a.	What is the value of each vacation tour? -
+SQL> 
+SQL> column "Tour Code" format a10
+SQL> column "Price" format $9,999.99
+SQL> select vt.tour_code, sum(d.price) as "Price"
+  2  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  3  where vt.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code
+  5  group by vt.tour_code
+  6  order by vt.tour_code, "Price";
+
+ TOUR_CODE      Price                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+         1    $370.63                                                                                                                                                                                   
+         2    $792.90                                                                                                                                                                                   
+         3    $748.41                                                                                                                                                                                   
+         4    $415.35                                                                                                                                                                                   
+         5    $596.36                                                                                                                                                                                   
+         6  $1,390.45                                                                                                                                                                                   
+         7    $336.17                                                                                                                                                                                   
+         8  $1,299.47                                                                                                                                                                                   
+         9  $1,100.60                                                                                                                                                                                   
+        10    $917.43                                                                                                                                                                                   
+        11    $467.87                                                                                                                                                                                   
+
+11 rows selected.
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> --1b. What is the value of the most expensive tour?
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Price" format $9,999.99
+SQL> select max(price) as "Price"
+  2  from (select sum(d.price) as price
+  3  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  4  where vt.tour_code = td.tour_code
+  5  and td.dest_code = d.dest_code
+  6  group by vt.tour_code);
+
+     Price                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+ $1,390.45                                                                                                                                                                                              
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> --1. What is the most expensive tour (based on vacation_tours)?
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Tour Description" format a30
+SQL> column "Price" format $9,999.99
+SQL> select vt.tour_description, sum(d.price) as "Price"
+  2  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  3  where vt.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code
+  5  group by vt.tour_code, vt.tour_description
+  6  having sum(d.price) = (
+  7  select max(total_price)
+  8  from (select sum(d.price) as total_price
+  9  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+ 10  where vt.tour_code = td.tour_code
+ 11  and td.dest_code = d.dest_code
+ 12  group by vt.tour_code))
+ 13  order by vt.tour_description, "Price" desc;
+
+TOUR_DESCRIPTION                                        Price                                                                                                                                           
+-------------------------------------------------- ----------                                                                                                                                           
+Palm Springs Adventure                              $1,390.45                                                                                                                                           
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> --QUESTION 2'S
+SQL> 
+SQL> --2a. What are the prices of all the Canadian tours (tour_region = CA). Tour_Description and Price only.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Tour Description" format a30
+SQL> column "Price" format $9,999.99
+SQL> select vt.tour_description, sum(d.price) as "Price"
+  2  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  3  where vt.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code
+  5  and vt.tour_region = 'CA'
+  6  group by vt.tour_code, vt.tour_description
+  7  order by vt.tour_description, "Price" desc;
+
+TOUR_DESCRIPTION                                        Price                                                                                                                                           
+-------------------------------------------------- ----------                                                                                                                                           
+Calgary Adventure                                     $467.87                                                                                                                                           
+Calgary Highlights                                    $415.35                                                                                                                                           
+Calgary Stampede                                      $596.36                                                                                                                                           
+Rocky Mountain Experience                           $1,100.60                                                                                                                                           
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> -- testing What are the prices of all the European tours (tour_region = EU). Tour_Description and Price only.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Tour Description" format a30
+SQL> column "Price" format $9,999.99
+SQL> select vt.tour_description, sum(d.price) as "Price"
+  2  from rcv_vacation_tour vt, rcv_tour_destination td, rcv_destination d
+  3  where vt.tour_code = td.tour_code
+  4  and td.dest_code = d.dest_code
+  5  and vt.tour_region = 'EU'
+  6  group by vt.tour_code, vt.tour_description
+  7  order by vt.tour_description, "Price" desc;
+
+TOUR_DESCRIPTION                                        Price                                                                                                                                           
+-------------------------------------------------- ----------                                                                                                                                           
+European Vacation                                   $1,299.47                                                                                                                                           
+France in 4 Days                                      $748.41                                                                                                                                           
+Paris Culture Tour                                    $792.90                                                                                                                                           
+Paris Highlights                                      $370.63                                                                                                                                           
+Sights of Barcelona                                   $917.43                                                                                                                                           
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --2. Which tours in Europe (tour_region is EU) are more expensive than any Canadian tour (tour_region is CA)?
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> COLUMN "Tour Description" FORMAT A20
+SQL> COLUMN "Price" FORMAT 999999.99
+SQL> select vt.tour_description, SUM(d.price) AS "Price"
+  2  from rcv_vacation_tour vt
+  3  join rcv_tour_destination td ON vt.tour_code = td.tour_code
+  4  join rcv_destination d ON td.dest_code = d.dest_code
+  5  where vt.tour_region = 'EU'
+  6  group by vt.tour_description, vt.tour_region
+  7  having SUM(d.price) > (
+  8  select MIN(total_price)
+  9  from (select vt2.tour_code, SUM(d2.price) as total_price
+ 10  from rcv_vacation_tour vt2
+ 11  join rcv_tour_destination td2 ON vt2.tour_code = td2.tour_code
+ 12  join rcv_destination d2 ON td2.dest_code = d2.dest_code
+ 13  where vt2.tour_region = 'CA'
+ 14  group by vt2.tour_code
+ 15      )
+ 16  )
+ 17  order by SUM(d.price);
+
+TOUR_DESCRIPTION                                        Price                                                                                                                                           
+-------------------------------------------------- ----------                                                                                                                                           
+France in 4 Days                                       748.41                                                                                                                                           
+Paris Culture Tour                                     792.90                                                                                                                                           
+Sights of Barcelona                                    917.43                                                                                                                                           
+European Vacation                                     1299.47                                                                                                                                           
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> --QUESTION 3'S
+SQL> 
+SQL> -- 3a. Construct a table with the average price. Include that table in the FROM clause of your final solution.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Average" format $9,999.99
+SQL> select avg(price) as "Average"
+  2  from rcv_destination;
+
+   Average                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+   $184.02                                                                                                                                                                                              
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> --3. Show all dest_description whose price is less than tour destination average.
+SQL> --Display the dest_description only.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Destination Description" format a30
+SQL> select d.dest_description
+  2  from rcv_destination d
+  3  where d.price < (
+  4  select avg(price)
+  5  from rcv_destination);
+
+DEST_DESCRIPTION                                                                                                                                                                                        
+----------------------------------------------------------------------------------------------------                                                                                                    
+Skip the Line Ticket: Eiffel Tower Summit Priority Access with Host                                                                                                                                     
+Gourmet Dinner & Sightseeing Cruise                                                                                                                                                                     
+Bateaux Parisiens Seine River Cruise                                                                                                                                                                    
+Bateaux Parisiens Seine River Gourmet Dinner & Sightseeing Cruise                                                                                                                                       
+Disneyland Paris 1-Day Ticket                                                                                                                                                                           
+French Riviera in One Day                                                                                                                                                                               
+Nice Small-Group Walking Food Tour with Local Specialties & Wine Tasting                                                                                                                                
+Nice Local Vineyards Small Group Half Day E-Bike Tour with Wine Tasting                                                                                                                                 
+French Riviera Famous Cities Scoot Coupe Self Drive Tour from Nice                                                                                                                                      
+Interactive Spanish Cooking Experience in Barcelona                                                                                                                                                     
+Girona and Dali Museum Small Group Tour with Hotel Pick-up from Barcelona                                                                                                                               
+Sunset Jazz Cruise in Barcelona                                                                                                                                                                         
+Modern & More Bike Tours Palm Springs                                                                                                                                                                   
+Earthquake Canyon Express Downhill Bicycle Adventure                                                                                                                                                    
+Palm Springs Windmill Tours                                                                                                                                                                             
+Private French-Inspired Cooking Class with a Fun Local in Palm Springs, CA                                                                                                                              
+Private Surf Lesson Newport Beach, California                                                                                                                                                           
+Lake Louise & Yoho N.P & Moraine Lake 1-Day Tour from Calgary or Banff                                                                                                                                  
+Calgary Stampede - Day pass Rodeo                                                                                                                                                                       
+2-Hour Horseback Trail Ride in Kananaskis                                                                                                                                                               
+Voyageur Canoe Tour                                                                                                                                                                                     
+Blackshale Suspension Bridge & Sightseeing Tour                                                                                                                                                         
+Heritage Park - the 1883 experience                                                                                                                                                                     
+Cycling the Bow                                                                                                                                                                                         
+Familia Sagrada Guided Tour                                                                                                                                                                             
+Rock climbing at COP                                                                                                                                                                                    
+Sulfur Mountain Gondola and Banff Hot Springs                                                                                                                                                           
+Palm Springs On/Off City Tour                                                                                                                                                                           
+Palm Springs Art Museum Guided Tour                                                                                                                                                                     
+
+29 rows selected.
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> 
+SQL> --QUESTION 4'S
+SQL> 
+SQL> --4a. Make a list of all vacation tours for Ethan Hunt's customers.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "Tour Code" format 999
+SQL> select vt.tour_code
+  2  from rcv_vacation_tour vt
+  3  where vt.tour_code in (select vt.tour_code from rcv_vacation_tour vt where vt.tour_code in (1, 4, 5))
+  4  order by vt.tour_code;
+
+ TOUR_CODE                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         4                                                                                                                                                                                              
+         5                                                                                                                                                                                              
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> --4. Which customers have taken the same vacation tours as Ethan Hunt's customers?
+SQL> --Do not include Ethan's Hunt's customers in the list.
+SQL> 
+SQL> set pagesize 40;
+SQL> set linesize 200;
+SQL> 
+SQL> column "First Name" format a20
+SQL> column "Last Name" format a20
+SQL> select distinct c.first_name, c.last_name
+  2  from rcv_customer c, rcv_vacation_tour vt, rcv_tour_customer tc
+  3  where c.customer_number = tc.customer_number
+  4  and vt.tour_code in (select vt.tour_code from rcv_vacation_tour vt where vt.tour_code in (1, 4, 5))
+  5  and c.agent_id != 1
+  6  order by c.first_name, c.last_name;
+
+FIRST_NAME                     LAST_NAME                                                                                                                                                                
+------------------------------ ------------------------------                                                                                                                                           
+Amy                            Folwer                                                                                                                                                                   
+Bernadette                     Rostenkowski-Wolowitz                                                                                                                                                    
+Lionel                         Messie                                                                                                                                                                   
+Raj                            Koothrappali                                                                                                                                                             
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> Commit;
+
+Commit complete.
+
+SQL> 
+SQL> spool off;
