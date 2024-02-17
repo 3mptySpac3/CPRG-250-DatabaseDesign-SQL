@@ -1,0 +1,168 @@
+SQL> 
+SQL> 
+SQL> 
+SQL> --rem Q1 - basic select columns with headers
+SQL> --rem insert solution here!
+SQL> select Fname "First", Lname "Last" From Author;
+
+First      Last                                                                                     
+---------- ----------                                                                               
+SAM        SMITH                                                                                    
+JANICE     JONES                                                                                    
+JAMES      AUSTIN                                                                                   
+SHEILA     MARTINEZ                                                                                 
+TAMARA     KZOCHSKY                                                                                 
+LISA       PORTER                                                                                   
+JUAN       ADAMS                                                                                    
+JACK       BAKER                                                                                    
+TINA       PETERSON                                                                                 
+WILLIAM    WHITE                                                                                    
+LISA       WHITE                                                                                    
+ROBERT     ROBINSON                                                                                 
+OSCAR      FIELDS                                                                                   
+ANTHONY    WILKINSON                                                                                
+
+14 rows selected.
+
+SQL> rem insert solution here!
+SQL> 
+SQL> --rem Q2
+SQL> --rem insert solution here!
+SQL> column "Order-Item #" format a20
+SQL> select order# || '-' || item# "Order-Item #", isbn "Book ISBN", quantity "Qty",
+  2      paideach "Price", paideach * quantity "Line Total", paideach * quantity * 0.05 "GST",
+  3      paideach * quantity * 1.05 "Total Price"
+  4  from orderitems;
+
+Order-Item #         Book ISBN         Qty      Price Line Total        GST Total Price             
+-------------------- ---------- ---------- ---------- ---------- ---------- -----------             
+1000-1               3437212490          1      19.95      19.95      .9975     20.9475             
+1001-1               9247381001          1      31.95      31.95     1.5975     33.5475             
+1001-2               2491748320          1      85.45      85.45     4.2725     89.7225             
+1002-1               8843172113          2      55.95      111.9      5.595     117.495             
+1003-1               8843172113          1      55.95      55.95     2.7975     58.7475             
+1003-2               1059831198          1      30.95      30.95     1.5475     32.4975             
+1003-3               3437212490          1      19.95      19.95      .9975     20.9475             
+1004-1               2491748320          2      85.45      170.9      8.545     179.445             
+1005-1               2147428890          1      39.95      39.95     1.9975     41.9475             
+1006-1               9959789321          1       54.5       54.5      2.725      57.225             
+1007-1               3957136468          3      72.15     216.45    10.8225    227.2725             
+1007-2               9959789321          1       54.5       54.5      2.725      57.225             
+1007-3               8117949391          1       8.95       8.95      .4475      9.3975             
+1007-4               8843172113          1      55.95      55.95     2.7975     58.7475             
+1008-1               3437212490          2      19.95       39.9      1.995      41.895             
+1009-1               3437212490          1      19.95      19.95      .9975     20.9475             
+1009-2               0401140733          1         22         22        1.1        23.1             
+1010-1               8843172113          1      55.95      55.95     2.7975     58.7475             
+1011-1               2491748320          1      85.45      85.45     4.2725     89.7225             
+1012-1               8117949391          1       8.95       8.95      .4475      9.3975             
+1012-2               1915762492          2         25         50        2.5        52.5             
+1012-3               2491748320          1      85.45      85.45     4.2725     89.7225             
+1012-4               0401140733          1         22         22        1.1        23.1             
+1013-1               8843172113          1      55.95      55.95     2.7975     58.7475             
+1014-1               0401140733          2         22         44        2.2        46.2             
+1015-1               3437212490          1      19.95      19.95      .9975     20.9475             
+1016-1               2491748320          1      85.45      85.45     4.2725     89.7225             
+1017-1               8117949391          2       8.95       17.9       .895      18.795             
+1018-1               3437212490          1      19.95      19.95      .9975     20.9475             
+1018-2               8843172113          1      55.95      55.95     2.7975     58.7475             
+1019-1               0401140733          1         22         22        1.1        23.1             
+1020-1               3437212490          1      19.95      19.95      .9975     20.9475             
+
+32 rows selected.
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> --rem Q3
+SQL> --rem insert solution here!
+SQL> select DISTINCT AuthorID "ID" from BOOKAUTHOR;
+
+ID                                                                                                  
+----                                                                                                
+S100                                                                                                
+J100                                                                                                
+P100                                                                                                
+W100                                                                                                
+W105                                                                                                
+B100                                                                                                
+F100                                                                                                
+R100                                                                                                
+A100                                                                                                
+K100                                                                                                
+A105                                                                                                
+P105                                                                                                
+
+12 rows selected.
+
+SQL> 
+SQL> 
+SQL> --rem Q4
+SQL> --rem insert solution here!
+SQL> column "Cust#-Order#" format a20
+SQL> select Customer# || '-' || Order# "Customer#-Order#", ShipDate - OrderDate "Days to Ship" from Orders;
+
+Customer#-Order#                                                                  Days to Ship      
+--------------------------------------------------------------------------------- ------------      
+1005-1000                                                                                    2      
+1010-1001                                                                                    1      
+1011-1002                                                                                    1      
+1001-1003                                                                                    0      
+1020-1004                                                                                    4      
+1018-1005                                                                                    1      
+1003-1006                                                                                    1      
+1007-1007                                                                                    2      
+1004-1008                                                                                    1      
+1005-1009                                                                                    2      
+1019-1010                                                                                    1      
+1010-1011                                                                                    2      
+1017-1012                                                                                           
+1014-1013                                                                                    1      
+1007-1014                                                                                    1      
+1020-1015                                                                                           
+1003-1016                                                                                           
+1015-1017                                                                                    1      
+1001-1018                                                                                           
+1018-1019                                                                                           
+1008-1020                                                                                           
+
+21 rows selected.
+
+SQL> 
+SQL> 
+SQL> --rem Q5
+SQL> --rem insert solution here!
+SQL> Select Lastname || ', '|| Firstname "Name", Address || ', ' || City ||', '|| State || ', ' || Zip "Address"
+  2  From CUSTOMERS;
+
+Name                   Address                                                                      
+---------------------- ---------------------------------------------                                
+MORALES, BONITA        P.O. BOX 651, EASTPOINT, FL, 32328                                           
+THOMPSON, RYAN         P.O. BOX 9835, SANTA MONICA, CA, 90404                                       
+SMITH, LEILA           P.O. BOX 66, TALLAHASSEE, FL, 32306                                          
+PIERSON, THOMAS        69821 SOUTH AVENUE, BOISE, ID, 83707                                         
+GIRARD, CINDY          P.O. BOX 851, SEATTLE, WA, 98115                                             
+CRUZ, MESHIA           82 DIRT ROAD, ALBANY, NY, 12211                                              
+GIANA, TAMMY           9153 MAIN STREET, AUSTIN, TX, 78710                                          
+JONES, KENNETH         P.O. BOX 137, CHEYENNE, WY, 82003                                            
+PEREZ, JORGE           P.O. BOX 8564, BURBANK, CA, 91510                                            
+LUCAS, JAKE            114 EAST SAVANNAH, ATLANTA, GA, 30314                                        
+MCGOVERN, REESE        P.O. BOX 18, CHICAGO, IL, 60606                                              
+MCKENZIE, WILLIAM      P.O. BOX 971, BOSTON, MA, 02110                                              
+NGUYEN, NICHOLAS       357 WHITE EAGLE AVE., CLERMONT, FL, 34711                                    
+LEE, JASMINE           P.O. BOX 2947, CODY, WY, 82414                                               
+SCHELL, STEVE          P.O. BOX 677, MIAMI, FL, 33111                                               
+DAUM, MICHELL          9851231 LONG ROAD, BURBANK, CA, 91508                                        
+NELSON, BECCA          P.O. BOX 563, KALMAZOO, MI, 49006                                            
+MONTIASA, GREG         1008 GRAND AVENUE, MACON, GA, 31206                                          
+SMITH, JENNIFER        P.O. BOX 1151, MORRISTOWN, NJ, 07962                                         
+FALAH, KENNETH         P.O. BOX 335, TRENTON, NJ, 08607                                             
+
+20 rows selected.
+
+SQL> clear columns
+columns cleared
+SQL> 
+SQL> 
+SQL> 
+SQL> spool off

@@ -1,0 +1,89 @@
+SQL> spool
+currently spooling to C:\spool\groupex_week12_2.txt
+SQL> --Q1
+SQL> 
+SQL> column "Author Name" format A20;
+SQL> column "Value" format $9,999,990.00;
+SQL> coilumn "Commission" format $0.00;
+SP2-0734: unknown command beginning "coilumn "C..." - rest of line ignored.
+SQL> 
+SQL> select a.FName || ' ' || a.LName as "Author Name",
+  2    SUM(oi.Quantity * oi.PaidEach) as "Value",
+  3    SUM(oi.Quantity * oi.PaidEach) * 0.01 as "Commission"
+  4  from Author a
+  5    join BookAuthor ba ON a.AuthorID = ba.AuthorID
+  6    join Books b ON ba.ISBN = b.ISBN
+  7    join OrderItems oi ON b.ISBN = oi.ISBN
+  8    group by a.FName, a.LName
+  9  order by a.FName, a.LName;
+
+Author Name                   Value Commission                                                                          
+-------------------- -------------- ----------                                                                          
+JACK BAKER                  $672.30      6.723                                                                          
+JAMES AUSTIN                $608.10      6.081                                                                          
+JANICE JONES                $219.00       2.19                                                                          
+JUAN ADAMS                  $391.65     3.9165                                                                          
+LISA PORTER                  $30.95      .3095                                                                          
+LISA WHITE                   $89.95      .8995                                                                          
+OSCAR FIELDS                $512.70      5.127                                                                          
+ROBERT ROBINSON             $548.50      5.485                                                                          
+SAM SMITH                    $30.95      .3095                                                                          
+TINA PETERSON               $391.65     3.9165                                                                          
+WILLIAM WHITE                $81.95      .8195                                                                          
+
+11 rows selected.
+
+SQL> 
+SQL> --Q2
+SQL> 
+SQL> select initcap(firstname) "First" , initcap(lastname) "Last",
+  2    COUNT (distinct authorid) "Number Anchors"
+  3  from customers join orders using(customer#)
+  4    join orderitems using (order#)
+  5    join books using(isbn)
+  6    join bookauthor using (isbn)
+  7  group by firstname, lastname
+  8  having COUNT(distinct authorid) >=2
+  9  order by 2, 1;
+
+First      Last       Number Anchors                                                                                    
+---------- ---------- --------------                                                                                    
+Kenneth    Falah                   3                                                                                    
+Tammy      Giana                   5                                                                                    
+Cindy      Girard                  2                                                                                    
+Jasmine    Lee                     3                                                                                    
+Jake       Lucas                   4                                                                                    
+Reese      Mcgovern                3                                                                                    
+Greg       Montiasa                2                                                                                    
+Bonita     Morales                 6                                                                                    
+Becca      Nelson                  6                                                                                    
+Jennifer   Smith                   3                                                                                    
+Leila      Smith                   4                                                                                    
+
+11 rows selected.
+
+SQL> 
+SQL> 
+SQL> --Q3
+SQL> 
+SQL> column "Publisher" format A30;
+SQL> column "Average Profit" format $9,999,990.00;
+SQL> 
+SQL> select p.Name as "Publisher",
+  2  AVG(b.Retail - b.Cost) as "Average Profit"
+  3  from Publisher p
+  4  join Books b on p.PubID = b.PubID
+  5   group by p.Name
+  6   order by p.Name;
+
+Publisher                      Average Profit                                                                           
+------------------------------ --------------                                                                           
+AMERICAN PUBLISHING                    $18.82                                                                           
+PRINTING IS US                         $12.18                                                                           
+PUBLISH OUR WAY                        $19.38                                                                           
+READING MATERIALS INC.                 $10.38                                                                           
+REED-N-RITE                            $21.23                                                                           
+
+5 rows selected.
+
+SQL> spool off

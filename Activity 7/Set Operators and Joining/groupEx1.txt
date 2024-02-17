@@ -1,0 +1,398 @@
+SQL> spool
+currently spooling to C:\spool\groupEx1.txt
+SQL> select AuthorID "AUTH", Fname "FNAME", Lname "LNAME",
+  2  from AUTHOR natural join BOOKAUTHOR
+  3  where BOOKAUTHOR.ISBN not in (
+  4      Select ISBN FROM ORDERITEMS
+  5      union
+  6      Select ISBN from Book
+  7      );
+from AUTHOR natural join BOOKAUTHOR
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> 
+SQL> column "ORDER#" format a20
+SQL> column "ITEM#" format a20
+SQL> column "TITLE" format a20
+SQL> column "QUANTITY" format a20
+SQL> column "PAIDEACH" format a20
+SQL> column "Item Total" format a20
+SQL> column "GIFT" format a20
+SQL> select ORDERITEMS.Order# "ORDER#", ORDERITEMS.Item# "ITEM#", Books.Title "TITLE", ORDERITEMS.Quantity "QUANTITY", ORDERITEMS.PaidEach "PAIDEACH", ORDERITEMS.quantity*ORDERITEMS.paideach "Item Total", promotion.gift "GIFT"
+  2  from  ORDERITEMS, Books, promotion
+  3  where ORDERITEMS.ISBN = Books.ISBN;
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## HOW TO MANAGE THE MA ########## ########## ########## BOOKMARKER              
+                      NAGER                                                                         
+                                                                                                    
+########## ########## HOW TO MANAGE THE MA ########## ########## ########## BOOK LABELS             
+                      NAGER                                                                         
+                                                                                                    
+########## ########## HOW TO MANAGE THE MA ########## ########## ########## BOOK COVER              
+                      NAGER                                                                         
+                                                                                                    
+########## ########## HOW TO MANAGE THE MA ########## ########## ########## FREE SHIPPING           
+                      NAGER                                                                         
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOKMARKER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK LABELS             
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK COVER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## FREE SHIPPING           
+                      NG                                                                            
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## BODYBUILD IN 10 MINU ########## ########## ########## BOOKMARKER              
+                      TES A DAY                                                                     
+                                                                                                    
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+########## ########## BODYBUILD IN 10 MINU ########## ########## ########## BOOK LABELS             
+                      TES A DAY                                                                     
+                                                                                                    
+########## ########## BODYBUILD IN 10 MINU ########## ########## ########## BOOK COVER              
+                      TES A DAY                                                                     
+                                                                                                    
+########## ########## BODYBUILD IN 10 MINU ########## ########## ########## FREE SHIPPING           
+                      TES A DAY                                                                     
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOKMARKER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK LABELS             
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK COVER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## FREE SHIPPING           
+                      NG                                                                            
+                                                                                                    
+########## ########## SHORTEST POEMS       ########## ########## ########## BOOKMARKER              
+########## ########## SHORTEST POEMS       ########## ########## ########## BOOK LABELS             
+########## ########## SHORTEST POEMS       ########## ########## ########## BOOK COVER              
+########## ########## SHORTEST POEMS       ########## ########## ########## FREE SHIPPING           
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOKMARKER              
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOK LABELS             
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOK COVER              
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## FREE SHIPPING           
+                      WAY                                                                           
+                                                                                                    
+########## ########## HOLY GRAIL OF ORACLE ########## ########## ########## BOOKMARKER              
+########## ########## HOLY GRAIL OF ORACLE ########## ########## ########## BOOK LABELS             
+########## ########## HOLY GRAIL OF ORACLE ########## ########## ########## BOOK COVER              
+########## ########## HOLY GRAIL OF ORACLE ########## ########## ########## FREE SHIPPING           
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOKMARKER              
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOK LABELS             
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## BOOK COVER              
+                      WAY                                                                           
+                                                                                                    
+########## ########## E-BUSINESS THE EASY  ########## ########## ########## FREE SHIPPING           
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+                      WAY                                                                           
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOKMARKER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK LABELS             
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK COVER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## FREE SHIPPING           
+                      DOVE                                                                          
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOKMARKER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK LABELS             
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK COVER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## FREE SHIPPING           
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+                      ION                                                                           
+                                                                                                    
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOKMARKER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK LABELS             
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK COVER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## FREE SHIPPING           
+                      NG                                                                            
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOKMARKER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK LABELS             
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK COVER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## FREE SHIPPING           
+                      DOVE                                                                          
+                                                                                                    
+########## ########## HANDCRANKED COMPUTER ########## ########## ########## BOOKMARKER              
+                      S                                                                             
+                                                                                                    
+########## ########## HANDCRANKED COMPUTER ########## ########## ########## BOOK LABELS             
+                      S                                                                             
+                                                                                                    
+########## ########## HANDCRANKED COMPUTER ########## ########## ########## BOOK COVER              
+                      S                                                                             
+                                                                                                    
+########## ########## HANDCRANKED COMPUTER ########## ########## ########## FREE SHIPPING           
+                      S                                                                             
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOKMARKER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK LABELS             
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK COVER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## FREE SHIPPING           
+                      NG                                                                            
+                                                                                                    
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOKMARKER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK LABELS             
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK COVER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## FREE SHIPPING           
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+                      ION                                                                           
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOKMARKER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK LABELS             
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK COVER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## FREE SHIPPING           
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOKMARKER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK LABELS             
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## BOOK COVER              
+                      NG                                                                            
+                                                                                                    
+########## ########## PAINLESS CHILD-REARI ########## ########## ########## FREE SHIPPING           
+                      NG                                                                            
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOKMARKER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK LABELS             
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## BOOK COVER              
+                      DOVE                                                                          
+                                                                                                    
+########## ########## BIG BEAR AND LITTLE  ########## ########## ########## FREE SHIPPING           
+                      DOVE                                                                          
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOKMARKER              
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK LABELS             
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## BOOK COVER              
+
+    ORDER#      ITEM# TITLE                  QUANTITY   PAIDEACH Item Total GIFT                    
+---------- ---------- -------------------- ---------- ---------- ---------- --------------------    
+                      ION                                                                           
+                                                                                                    
+########## ########## DATABASE IMPLEMENTAT ########## ########## ########## FREE SHIPPING           
+                      ION                                                                           
+                                                                                                    
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOKMARKER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK LABELS             
+########## ########## REVENGE OF MICKEY    ########## ########## ########## BOOK COVER              
+########## ########## REVENGE OF MICKEY    ########## ########## ########## FREE SHIPPING           
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOKMARKER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK LABELS             
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## BOOK COVER              
+                      MS                                                                            
+                                                                                                    
+########## ########## COOKING WITH MUSHROO ########## ########## ########## FREE SHIPPING           
+                      MS                                                                            
+                                                                                                    
+
+128 rows selected.
+
+SQL> 
+SQL> 
+SQL> select customer# "CUSTOMER#", FirstName "FIRSTNAME", LastName "LASTNAME", Title "TITLE"
+  2  from Customer left outer join Orders using (Customer#)
+  3      left join ORDERITEMS using (Order#)
+  4      right join Books on ORDERITEMS.ISBN = BOOKS.ISBN
+  5      order by 3, 4, 2;
+from Customer left outer join Orders using (Customer#)
+     *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> 
+SQL> spool off
