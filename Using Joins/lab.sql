@@ -10,7 +10,7 @@ spool C:\spool\lab_week11_4.txt
 /*
 This SQL code retrieves information about a specific customer named Sheldon Cooper and the tours and destinations he has booked. 
 The code uses a subquery to join several tables (rcv_customer, rcv_tour_customer, rcv_vacation_tour, rcv_tour_destination, 
-and rcv_destination) to retrieve the necessary information.
+and rcv_destination) to retrieve the necessary information....
 
 */
 
